@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(process.cwd(), "../frontend/dist")));
 
 // Redirigir todas las rutas al index.html (SPA)
-app.get("*", (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(process.cwd(), "../frontend/dist/index.html"));
 });
 
