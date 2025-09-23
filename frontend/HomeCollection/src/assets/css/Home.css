@@ -1,0 +1,34 @@
+/* Cards */
+.home-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer; /* cursor pointer */
+}
+
+.home-card:hover {
+  transform: scale(1.05); /* pequeño zoom al pasar el mouse */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* sombra más intensa */
+}
+
+/* Separador de productos */
+.separator-text {
+  color: var(--principal);
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Banner */
+.home-banner {
+  height: 30vh;
+  background-color: var(--complementario);
+  border-radius: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.home-banner h1 {
+  color: var(--principal);
+  font-weight: bold;
+  margin: 0;
+}
