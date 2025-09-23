@@ -1,0 +1,9 @@
+node_modules/
+
+dist/
+build/
+.cache/
+
+.DS_Store
+.env.local
+.env.production
