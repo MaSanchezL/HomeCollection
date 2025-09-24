@@ -32,11 +32,7 @@ function Header() {
             <FontAwesomeIcon icon={faUser} size="2x" className="icon-hover" />
           </Nav.Link>
           <Nav.Link href="#cart" className="icon-hover">
-            <FontAwesomeIcon
-              icon={faShoppingBag}
-              size="2x"
-              className="icon-hover"
-            />
+            <FontAwesomeIcon icon={faShoppingBag} size="2x"className="icon-hover"/>
           </Nav.Link>
         </Nav>
       </Container>
