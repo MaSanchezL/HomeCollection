@@ -1,0 +1,40 @@
+.login-card {
+    background-color: var(--secundario);
+    padding: 1.5rem; 
+    border-radius: 0.5rem; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+.login-title {
+    color: white;
+    margin-bottom: 1.5rem; 
+    text-align: center;
+    font-weight: 600;
+}
+
+.login-button {
+    background-color: var(--principal)!important;
+    border-color: var(--complementario)!important;
+    width: 100%;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+    color: white; 
+}
+
+.login-button:hover {
+    background-color: var(--complementario);
+    border-color: var(--complementario);
+    color: var(--principal);
+}
+
+.login-link {
+    color: var(--principal);
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.login-link:hover {
+    color: var(--secundario);
+}
