@@ -1,0 +1,33 @@
+:root {
+  --principal: #19183b;
+  --secundario: #708993;
+  --complementario: #a1c2bd;
+  --fondo: #e7f2ef;
+}
+
+.form-select {
+    background-color: var(--fondo);
+    border: 1px solid var(--complementario);
+    text-align: end; 
+    color: var(--principal);
+    
+}
+
+.pag{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin: 40px;    
+}
+
+
+.pag .page-link{
+    color: var(--principal);    
+    border: 1px solid var(--complementario);
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 15px;
+    margin: 5px;
+
+}
+

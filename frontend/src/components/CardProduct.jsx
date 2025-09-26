@@ -4,7 +4,9 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useState } from "react";
-import { HeartFill } from "react-bootstrap-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import "../assets/css/CardProduct.css";
 
 const CardProduct = ({ id, nombre, imagen, descripcion, precio }) => {
   const [cantidad, setCantidad] = useState(0);
@@ -17,23 +19,24 @@ const CardProduct = ({ id, nombre, imagen, descripcion, precio }) => {
   };
 
   return (
-    <Card className="mb-4 shadow-sm p-4">
+    <Card className="carta">
       <Container className="d-flex justify-content-center p-4">
         <Row>
-          <Col md={6}>
+          <Col md={6} className="columnas">
             <Card.Img variant="top" src={imagen} />
             <Card.Body>
               <Card.Text>{descripcion}</Card.Text>
             </Card.Body>
           </Col>
 
-          <Col md={6}>
-            <Card.Body className="d-flex flex-column justify-content-center gap-4 mb-2">
+          <Col md={6} className="columnas">
+            <Card.Body className="derecho">
               <Card.Title>{nombre}</Card.Title>
-              <Card.Text className="fw-bold">Precio: </Card.Text>
+              <Card.Text className="fw-bold">Precio: {precio}</Card.Text>
             </Card.Body>
-            <Card.Body className="d-flex  justify-content-between">
-              <Card.Text className="fw-bold ">Cantidad:</Card.Text>
+
+            <Card.Body className="cantidad">
+              <Card.Text>Cantidad:</Card.Text>
               <Button
                 onClick={sumar}
                 variant="outline-secondary"
@@ -56,17 +59,17 @@ const CardProduct = ({ id, nombre, imagen, descripcion, precio }) => {
               </Button>
             </Card.Body>
 
-            <Card.Body className="d-flex flex-column justify-content-center gap-4 mb-2">
-              <div className="d-flex align-items-center justify-content-center">
+            <Card.Body className="d-flex flex-column justify-content-center gap-4 mb-0">
+              <div className="d-flex align-items-center justify-content-center gap-4 mb-0">
                 <Button
                   variant="primary"
                   size="lg"
-                  style={{ width: "350px", margin: "0 auto" }}
+                  style={{ width: "250px", margin: "0 auto" }}
                 >
                   Agregar al carrito
                 </Button>
 
-                <HeartFill color="red" size={32} className="m-4" />
+                <FontAwesomeIcon icon={faHeart} color="red" size="2x" />
               </div>
             </Card.Body>
           </Col>

@@ -55,7 +55,6 @@ function Home() {
             </Col>
           </Row>
 
-
           <Row className="my-5 align-items-center">
             <Col className="d-flex align-items-center">
               <hr style={{ flex: 1, borderColor: "var(--secundario)" }} />
@@ -67,7 +66,6 @@ function Home() {
               <hr style={{ flex: 1, borderColor: "var(--secundario)" }} />
             </Col>
           </Row>
-
 
           <Row className="g-4 mb-5 justify-content-evenly">
             <Col xs={12} md={3}>
