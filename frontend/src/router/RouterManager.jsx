@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 // import Checkout from "../components/Checkout";
 import Home from "../views/Home";
 import Login from "../views/Login";
+import Register from "../views/Register";
+import Profile from "../views/Profile";
 // import CardProduct from "../components/CardProduct";
 // import Pedidos from "../views/Pedidos";
 // import { CardHome } from "../components/CardHome";
@@ -18,8 +20,9 @@ const RouterManager = () => {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          {/* <Route path="/profile" element={<Profile />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
+          {/*  <Route path="/checkout" element={<Checkout />} />
           <Route path="/cart" element={<CardHome />} />
           <Route path="/pedidos" element={<Pedidos />} /> */}
         </Routes>

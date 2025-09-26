@@ -40,7 +40,7 @@ function Login() {
               </Button>
             </Form>
             <p className="text-center mt-3">
-              ¿No tienes cuenta? <a href="#register" className="login-link">Regístrate aquí</a>
+              ¿No tienes cuenta? <a href="/register" className="login-link">Regístrate aquí</a>
             </p>
           </div>
         </Col>
