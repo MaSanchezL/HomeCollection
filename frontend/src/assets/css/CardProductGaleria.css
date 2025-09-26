@@ -8,7 +8,7 @@
 .carta-galeria {
   display: flex;
   flex-direction: column;
-  width: 100%;  
+  width: 100%;
   min-height: 400px;
   max-width: 500px;
   margin: 0;
@@ -19,7 +19,6 @@
   border-radius: 1rem;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   padding: 20px;
-  
 }
 
 .carta-galeria .card-img-top {
@@ -46,7 +45,7 @@
   border-color: var(--principal);
   font-weight: bold;
   position: absolute;
-  bottom: 20px;  
+  bottom: 20px;
 }
 
 .carta-galeria .btn-primary:hover {

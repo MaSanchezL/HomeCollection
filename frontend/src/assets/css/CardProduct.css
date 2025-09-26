@@ -30,6 +30,7 @@
 
 .carta .card-img-top {
   width: 100%;
+  min-width: 300px;
   height: auto;
   object-fit: cover;
   border-radius: 0.5rem;

@@ -1,9 +1,10 @@
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import '../assets/css/CardProductGaleria.css'
+import "../assets/css/CardProductGaleria.css";
 import CardBody from "react-bootstrap/esm/CardBody";
+import { Link } from "react-router-dom";
 
-const CardProductGaleria = ({ nombre, imagen, precio }) => {
+const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
   return (
     <Card className="carta-galeria">
       <Card.Img variant="top" src={imagen} />
@@ -13,12 +14,15 @@ const CardProductGaleria = ({ nombre, imagen, precio }) => {
       </Card.Body>
 
       <Card.Body>
-        <Button
-          variant="primary"
-          size="lg"
-          style={{ width: "200px", margin: "0 auto" }}>
-          Ver más
-        </Button>
+        <Link to={`/producto/${id}`}>
+          <Button
+            variant="primary"
+            size="lg"
+            style={{ width: "200px", margin: "0 auto" }}
+          >
+            Ver más
+          </Button>
+        </Link>
       </Card.Body>
     </Card>
   );
