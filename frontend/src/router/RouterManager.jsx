@@ -8,6 +8,7 @@ import Register from "../views/Register";
 import Profile from "../views/Profile";
 import GaleriaProductos from "../views/GaleriaProductos";
 import CardProduct from "../components/CardProduct";
+import CrearProducto from "../views/CrearProducto.jsx";
 // import CardProduct from "../components/CardProduct";
 // import Pedidos from "../views/Pedidos";
 // import { CardHome } from "../components/CardHome";
