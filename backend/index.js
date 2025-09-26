@@ -35,11 +35,9 @@ app.use("/api/*", (req, res) => {
   });
 });
 
-// Redirigir todas las rutas al index.html (SPA)
-// app.use((req, res) => {
-//  res.sendFile(path.join(process.cwd(), "../frontend/dist/index.html"));
-//});
-// Iniciar servidor
+app.use((req, res) => {
+  res.sendFile(path.join(process.cwd(), "../frontend/dist/index.html"));
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

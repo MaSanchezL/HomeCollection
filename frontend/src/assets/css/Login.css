@@ -1,0 +1,81 @@
+.login-card {
+  background-color: var(--secundario);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.login-card .list-group-item {
+  background-color: var(--secundario);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.2);
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.login-card .list-group-item:first-child {
+  border-top-width: 0;
+}
+.login-card .list-group-item:last-child {
+  border-bottom-width: 0;
+}
+
+.login-title {
+  color: white;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.login-button {
+  background-color: var(--principal) !important;
+  border-color: var(--complementario) !important;
+  width: 100%;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+  color: white;
+}
+
+.login-button:hover {
+  background-color: var(--complementario);
+  border-color: var(--complementario);
+  color: var(--principal);
+}
+
+.login-link {
+  color: var(--principal);
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.login-link:hover {
+  color: var(--secundario);
+}
+
+.pedidos-button {
+  background-color: var(--principal) !important;
+  border-color: var(--complementario) !important;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  color: white;
+}
+
+.pedidos-button:hover {
+  background-color: var(--complementario) !important;
+  border-color: var(--principal) !important;
+}
+
+.logout-button {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  color: white;
+}
+
+.logout-button:hover {
+  background-color: #c82333 !important;
+  border-color: #c82333 !important;
+}
