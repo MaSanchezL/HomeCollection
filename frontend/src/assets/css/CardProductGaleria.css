@@ -1,0 +1,54 @@
+:root {
+  --principal: #19183b;
+  --secundario: #708993;
+  --complementario: #a1c2bd;
+  --fondo: #e7f2ef;
+}
+
+.carta-galeria {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 400px;
+  max-width: 500px;
+  margin: 0;
+  font-family: "Segoe UI", "Roboto", "sans-serif" !important;
+  font-size: large;
+  background-color: var(--fondo) !important;
+  border: 2px solid var(--complementario) !important;
+  border-radius: 1rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+}
+
+.carta-galeria .card-img-top {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 10px;
+}
+
+.texto {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 10px;
+}
+
+.carta-galeria .card-title {
+  color: var(--principal);
+  font-weight: bold;
+}
+
+.carta-galeria .btn-primary {
+  background-color: var(--principal);
+  border-color: var(--principal);
+  font-weight: bold;
+  position: absolute;
+  bottom: 20px;
+}
+
+.carta-galeria .btn-primary:hover {
+  background-color: var(--secundario);
+  border-color: var(--secundario);
+}

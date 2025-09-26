@@ -1,0 +1,97 @@
+:root {
+  --principal: #19183b;
+  --secundario: #708993;
+  --complementario: #a1c2bd;
+  --fondo: #e7f2ef;
+}
+
+.carta {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  height: 100%;
+  margin: 30px auto;
+  font-family: "Segoe UI", "Roboto", sans-serif;
+  font-size: large;
+  background-color: var(--fondo) !important;
+  border: 2px solid var(--complementario) !important;
+  border-radius: 1rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+}
+
+.columnas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.carta .card-img-top {
+  width: 100%;
+  min-width: 300px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 10px;
+}
+
+.derecho {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 30px;
+}
+
+.cantidad {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.cantidad button {
+  width: 45px;
+  height: 40px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--complementario);
+  color: var(--principal);
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+
+.cantidad .card-text {
+  margin-right: 10px;
+  margin-top: 10px;
+  color: var(--principal);
+  font-weight: bold;
+}
+
+.carta .card-title {
+  color: var(--principal);
+  font-weight: bold;
+  text-align: center;
+}
+
+.carta .card-text {
+  color: var(--secundario);
+  text-align: start;
+}
+
+.carta .btn-primary {
+  background-color: var(--principal);
+  border-color: var(--principal);
+  font-weight: bold;
+}
+
+.carta .btn-primary:hover {
+  background-color: var(--secundario);
+  border-color: var(--secundario);
+}
+
+.carta .fa-heart {
+  margin-left: 10px;
+}

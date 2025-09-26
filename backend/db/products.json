@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "nombre": "Laptop Pro 15",
+    "precio": 1299.99,
+    "imagen": "https://placehold.co/300x200",
+    "descripcion": "Portátil de alto rendimiento con pantalla de 15 pulgadas y procesador de última generación."
+  },
+  {
+    "id": 2,
+    "nombre": "Smartphone X",
+    "precio": 899.5,
+    "imagen": "data:image/jpeg;base64,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",
+    "descripcion": "Teléfono inteligente con cámara de 108 MP y batería de larga duración."
+  },
+  {
+    "id": 3,
+    "nombre": "Auriculares Inalámbricos",
+    "precio": 149.9,
+    "imagen": "https://placehold.co/300x200",
+    "descripcion": "Auriculares bluetooth con cancelación activa de ruido y estuche de carga."
+  },
+  {
+    "id": 4,
+    "nombre": "Monitor UltraWide 34\"",
+    "precio": 599.0,
+    "imagen": "https://placehold.co/300x200",
+    "descripcion": "Pantalla curva de 34 pulgadas con resolución QHD para multitarea y gaming."
+  },
+  {
+    "id": 5,
+    "nombre": "Teclado Mecánico RGB",
+    "precio": 120.75,
+    "imagen": "https://placehold.co/300x200",
+    "descripcion": "Teclado mecánico retroiluminado con switches rojos y diseño ergonómico."
+  },
+  {
+    "id": 6,
+    "nombre": "Mouse Gamer Pro",
+    "precio": 79.99,
+    "imagen": "https://placehold.co/300x200",
+    "descripcion": "Ratón óptico con 8 botones programables y sensor de alta precisión."
+  },
+  {
+    "id": 7,
+    "nombre": "Smartwatch Fit",
+    "precio": 199.9,
+    "imagen": "https://placehold.co/300x200",
+    "descripcion": "Reloj inteligente con monitoreo de salud, GPS integrado y resistencia al agua."
+  },
+  {
+    "id": 8,
+    "nombre": "Cámara Reflex 24MP",
+    "precio": 749.0,
+    "imagen": "https://placehold.co/300x200",
+    "descripcion": "Cámara digital con sensor de 24 megapíxeles y lente intercambiable."
+  },
+  {
+    "id": 9,
+    "nombre": "Silla Ergonómica",
+    "precio": 320.0,
+    "imagen": "https://placehold.co/300x200",
+    "descripcion": "Silla de oficina ergonómica con soporte lumbar y ajuste de altura."
+  },
+  {
+    "id": 10,
+    "nombre": "Tablet 10\"",
+    "precio": 450.0,
+    "imagen": "https://placehold.co/300x200",
+    "descripcion": "Tableta de 10 pulgadas con pantalla Full HD y 128 GB de almacenamiento."
+  }
+]

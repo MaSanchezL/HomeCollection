@@ -1,0 +1,39 @@
+:root {
+  --principal: #19183b;
+  --secundario: #708993;
+  --complementario: #a1c2bd;
+  --fondo: #e7f2ef;
+}
+
+.form{
+    font-family: "Segoe UI", "Roboto", sans-serif;
+    background-color: var(--fondo);
+    border: 2px solid var(--complementario);
+    border-radius: 0.5rem;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    padding: 40px;
+}
+
+.titulo {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 25px;
+    color: var(--principal);
+}
+
+.form .btn-primary{
+    background-color: var(--principal);
+    border-color: var(--principal);
+    font-weight: bold;
+    margin-top: 20px;
+
+}
+
+.form .btn-primary:hover{
+    background-color: var(--secundario);
+    border-color: var(--secundario);
+
+}
