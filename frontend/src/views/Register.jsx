@@ -4,6 +4,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "../assets/css/Login.css";
+import { Link } from "react-router-dom";
 
 function Register() {
   return (
@@ -22,20 +23,29 @@ function Register() {
                 <Col md={6}>
                   <Form.Group className="mb-3" controlId="formBasicDocument">
                     <Form.Label>Número de Documento</Form.Label>
-                    <Form.Control type="text" placeholder="Nro de Rut o documento" />
+                    <Form.Control
+                      type="text"
+                      placeholder="Nro de Rut o documento"
+                    />
                   </Form.Group>
                 </Col>
                 <Col md={6}>
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Correo Electrónico</Form.Label>
-                    <Form.Control type="email" placeholder="ejemplo@correo.com" />
+                    <Form.Control
+                      type="email"
+                      placeholder="ejemplo@correo.com"
+                    />
                   </Form.Group>
                 </Col>
               </Row>
 
               <Form.Group className="mb-3" controlId="formBasicAddress">
                 <Form.Label>Dirección</Form.Label>
-                <Form.Control type="text" placeholder="Introduce tu dirección" />
+                <Form.Control
+                  type="text"
+                  placeholder="Introduce tu dirección"
+                />
               </Form.Group>
 
               <Row>
@@ -46,7 +56,10 @@ function Register() {
                   </Form.Group>
                 </Col>
                 <Col md={6}>
-                  <Form.Group className="mb-4" controlId="formBasicConfirmPassword">
+                  <Form.Group
+                    className="mb-4"
+                    controlId="formBasicConfirmPassword"
+                  >
                     <Form.Label>Confirmar Contraseña</Form.Label>
                     <Form.Control
                       type="password"
@@ -62,9 +75,9 @@ function Register() {
             </Form>
             <p className="text-center mt-3">
               ¿Ya tienes cuenta?{" "}
-              <a href="/login" className="login-link">
+              <Link to="/login" className="login-link">
                 Inicia Sesión aquí
-              </a>
+              </Link>
             </p>
           </div>
         </Col>
