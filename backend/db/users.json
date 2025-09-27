@@ -1,12 +1,47 @@
 [
   {
-    "email": "test@test.com",
-    "password": "123123",
-    "id": "UYz_2Vy9rNw7uELQ7AZ8D"
+    "id": 1,
+    "name": "Usuario Uno",
+    "documento": "11111111-1",
+    "direccion": "Av. Siempre Viva 1",
+    "email": "correo1@correo.com",
+    "password": "123456",
+    "admin": true
   },
   {
-    "email": "test@example.com",
+    "id": 2,
+    "name": "Usuario Dos",
+    "documento": "22222222-2",
+    "direccion": "Av. Siempre Viva 2",
+    "email": "correo2@correo.com",
     "password": "123456",
-    "id": "vN4mx5e_l-yWkDP_3gtBk"
+    "admin": false
+  },
+  {
+    "id": 3,
+    "name": "Usuario Tres",
+    "documento": "33333333-3",
+    "direccion": "Av. Siempre Viva 3",
+    "email": "correo3@correo.com",
+    "password": "123456",
+    "admin": false
+  },
+  {
+    "id": 4,
+    "name": "Usuario Cuatro",
+    "documento": "44444444-4",
+    "direccion": "Av. Siempre Viva 4",
+    "email": "correo4@correo.com",
+    "password": "123456",
+    "admin": false
+  },
+  {
+    "id": 5,
+    "name": "Usuario Cinco",
+    "documento": "55555555-5",
+    "direccion": "Av. Siempre Viva 5",
+    "email": "correo5@correo.com",
+    "password": "123456",
+    "admin": false
   }
 ]

@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -6,11 +9,16 @@ import ListGroup from "react-bootstrap/ListGroup";
 import "../assets/css/Login.css";
 
 function Profile() {
-  const userData = {
-    nombre: "Juan Pérez",
-    email: "juan.perez@tienda.com",
-    documento: "12.345.678-9",
-    direccion: "Av. Siempre Viva 742",
+  const { user, logout } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const handleCrearProducto = () => {
+    navigate("/crear-producto");
   };
 
   return (
@@ -21,32 +29,50 @@ function Profile() {
             <h2 className="login-title">Mi Perfil de Usuario</h2>
             <ListGroup variant="flush" className="mb-4">
               <ListGroup.Item>
-                <div className fw-bold>Nombre Completo:</div>
-                <p className="mb-0">{userData.nombre}</p>
+                <div className="fw-bold">Nombre Completo:</div>
+                <p className="mb-0">{user?.name || "Sin nombre"}</p>
               </ListGroup.Item>
               <ListGroup.Item>
-                <div class fw-bold>Correo Electrónico:</div>
-                <p className="mb-0">{userData.email}</p>
+                <div className="fw-bold">Correo Electrónico:</div>
+                <p className="mb-0">{user?.email}</p>
               </ListGroup.Item>
               <ListGroup.Item>
-                <div class fw-bold>Número de Documento:</div>
-                <p className="mb-0">{userData.documento}</p>
+                <div className="fw-bold">Número de Documento:</div>
+                <p className="mb-0">{user?.documento || "No registrado"}</p>
               </ListGroup.Item>
               <ListGroup.Item>
-                <div class fw-bold>Dirección:</div>
-                <p className="mb-0">{userData.direccion}</p>
+                <div className="fw-bold">Dirección:</div>
+                <p className="mb-0">{user?.direccion || "No registrada"}</p>
               </ListGroup.Item>
-               <ListGroup.Item>
-              </ListGroup.Item>
+              {/* {user?.admin && (
+                <ListGroup.Item>
+                  <p className="text-success fw-bold">Administrador</p>
+                </ListGroup.Item>
+              )} */}
             </ListGroup>
             <Row className="mt-4 align-items-center">
-              <Col xs={6}>
+              <Col xs={4}>
                 <Button type="button" className="pedidos-button">
                   Mis Pedidos
                 </Button>
               </Col>
-              <Col xs={6}>
-                <Button type="button" className="logout-button">
+              {user?.admin && (
+                <Col xs={4}>
+                  <Button
+                    type="button"
+                    className="pedidos-button"
+                    onClick={handleCrearProducto}
+                  >
+                    Crear Producto
+                  </Button>
+                </Col>
+              )}
+              <Col xs={4}>
+                <Button
+                  type="button"
+                  className="logout-button"
+                  onClick={handleLogout}
+                >
                   Cerrar Sesión
                 </Button>
               </Col>
