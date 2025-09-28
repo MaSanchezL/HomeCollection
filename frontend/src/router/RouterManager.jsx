@@ -10,6 +10,7 @@ import GaleriaProductos from "../views/GaleriaProductos";
 import CardProduct from "../components/CardProduct";
 import CrearProducto from "../views/CrearProducto.jsx";
 import NotFound from "../views/NotFound";
+import Cart from "../views/Cart.jsx";
 // import CardProduct from "../components/CardProduct";
 // import Pedidos from "../views/Pedidos";
 // import { CardHome } from "../components/CardHome";
@@ -30,8 +31,8 @@ const RouterManager = () => {
           <Route path="/producto/:id" element={<CardProduct />} />
           <Route path="/crear-producto" element={<CrearProducto />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/cart" element={<Cart />} />
           {/*  <Route path="/checkout" element={<Checkout />} />
-          <Route path="/cart" element={<CardHome />} />
           <Route path="/pedidos" element={<Pedidos />} /> */}
         </Routes>
       </BrowserRouter>
