@@ -1,11 +1,10 @@
+import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Pagination from "react-bootstrap/Pagination";
-import CardProductGaleria from "../components/CardProductGaleria.jsx";
-import { useEffect, useState } from "react";
-import "../assets/css/GaleriaProductos.css";
 import Form from "react-bootstrap/Form";
+import CardProductGaleria from "../components/CardProductGaleria.jsx";
+import "../assets/css/GaleriaProductos.css";
 
 const GaleriaProductos = () => {
   const [card, setCard] = useState([]);
@@ -13,10 +12,12 @@ const GaleriaProductos = () => {
   const [pageActive, setPageActive] = useState(1);
   const [sortPrecio, setSortPrecio] = useState("menor_mayor");
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const getcard = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/products/all?page=${pageActive}&sortDirection=${sortPrecio}`
+        `${API_URL}/api/products/all?page=${pageActive}&sortDirection=${sortPrecio}`
       );
       const data = await res.json();
       setCard(data.productos);
@@ -35,22 +36,20 @@ const GaleriaProductos = () => {
   };
 
   const handleNext = () => {
-    const ultimaPagina = totalProductos / 10;
+    const ultimaPagina = Math.ceil(totalProductos / 10);
     if (pageActive < ultimaPagina) setPageActive(pageActive + 1);
   };
 
   return (
     <>
       <Form.Select
-        className=""
-        aria-label="Default select example"
-        onChange={(e) => {
-          setSortPrecio(e.target.value);
-        }}
+        className="mb-3"
+        aria-label="Ordenar productos"
+        onChange={(e) => setSortPrecio(e.target.value)}
+        value={sortPrecio}
       >
-        <option>Ordenar por</option>
+        <option value="menor_mayor">Menor a mayor precio</option>
         <option value="mayor_menor">Mayor a menor precio</option>
-        <option value="menor_mayor">Menor a mayor</option>
       </Form.Select>
 
       <Container>
@@ -69,20 +68,23 @@ const GaleriaProductos = () => {
       </Container>
 
       <div className="pag">
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item" onClick={handlePrev}>
-              <div class="page-link" aria-label="Previous">
+        <nav aria-label="Navegación de páginas">
+          <ul className="pagination justify-content-center">
+            <li className={`page-item ${pageActive === 1 ? "disabled" : ""}`} onClick={handlePrev}>
+              <div className="page-link" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </div>
             </li>
-            <li class="page-item">
-              <a class="page-link" href="#">
-                {pageActive}
-              </a>
+            <li className="page-item">
+              <div className="page-link">{pageActive}</div>
             </li>
-            <li class="page-item" onClick={handleNext}>
-              <div class="page-link" aria-label="Next">
+            <li
+              className={`page-item ${
+                pageActive === Math.ceil(totalProductos / 10) ? "disabled" : ""
+              }`}
+              onClick={handleNext}
+            >
+              <div className="page-link" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
               </div>
             </li>
