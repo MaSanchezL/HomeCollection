@@ -28,8 +28,6 @@ const CrearProducto = () => {
       return;
     }
 
-    // esta parte va en el CrearProductoContex que me falta
-
     const nuevoProducto = {
       nombre,
       precio: Number(precio),
