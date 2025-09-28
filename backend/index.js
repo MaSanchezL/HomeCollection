@@ -21,10 +21,11 @@ app.use("/api/*", (req, res) => {
 });
 
 // SERVIR ARCHIVOS ESTÁTICOS DEL FRONTEND
-const frontendDist = path.join(process.cwd(), "frontend", "dist");
+const frontendDist = path.join(process.cwd(), "../frontend/dist");
 app.use(express.static(frontendDist));
 
 // CATCH-ALL SOLO PARA RUTAS DE REACT
+app.use(express.static(frontendDist));
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendDist, "index.html"));
 });
