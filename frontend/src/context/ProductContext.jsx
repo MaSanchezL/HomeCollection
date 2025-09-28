@@ -8,7 +8,7 @@ const ProductProvider = ({ children }) => {
   const [countProducts, setCountProducts] = useState(0);
   const [data, setData] = useState([]);
 
-  const url = "https://fakestoreapi.com/products";
+  const url = "http://localhost:3000/api/product/all";
 
   const getData = async () => {
     const response = await fetch(url);
