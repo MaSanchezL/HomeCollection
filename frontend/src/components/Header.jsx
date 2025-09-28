@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -6,10 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 import logo1 from "../assets/logo1.png";
 import "../assets/css/Header.css";
+import { CartContext } from "../context/CartContext";
 
 function Header() {
   const [logoHover, setLogoHover] = useState(false);
   const [cartItems, setCartItems] = useState(0);
+
+  const { totalProducts } = useContext(CartContext);
 
   return (
     <Navbar
@@ -32,7 +35,12 @@ function Header() {
             <FontAwesomeIcon icon={faUser} size="2x" className="icon-hover" />
           </Nav.Link>
           <Nav.Link href="#cart" className="icon-hover">
-            <FontAwesomeIcon icon={faShoppingBag} size="2x"className="icon-hover"/>
+            {totalProducts > 0 ? totalProducts : ""}
+            <FontAwesomeIcon
+              icon={faShoppingBag}
+              size="2x"
+              className="icon-hover"
+            />
           </Nav.Link>
         </Nav>
       </Container>

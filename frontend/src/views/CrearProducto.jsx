@@ -2,9 +2,12 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Container } from "react-bootstrap";
 import { useState } from "react";
-import "../assets/css/CrearProducto.css"
+import "../assets/css/CrearProducto.css";
+import { useNavigate } from "react-router-dom";
 
 const CrearProducto = () => {
+  const navigate = useNavigate();
+
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
   const [stock, setStock] = useState("");
@@ -23,6 +26,45 @@ const CrearProducto = () => {
     ) {
       alert("Todos los campos son obligatorios");
       return;
+    }
+
+    // esta parte va en el CrearProductoContex que me falta
+
+    const nuevoProducto = {
+      nombre,
+      precio: Number(precio),
+      stock: Number(stock),
+      imagen,
+      descripcion,
+    };
+
+    try {
+      const res = await fetch("http://localhost:3000/api/products/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(nuevoProducto),
+      });
+
+      if (!res.ok)
+        throw new Error(data.message || "Error al crear el producto");
+
+      const data = await res.json();
+
+      alert("Producto creado correctamente");
+
+      if (data.id) {
+        navigate(`/producto/${data.id}`);
+      }
+
+      setNombre("");
+      setPrecio("");
+      setStock("");
+      setImagen("");
+      setDescripcion("");
+    } catch (error) {
+      alert(error.message);
     }
   };
 

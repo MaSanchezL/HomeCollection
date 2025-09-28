@@ -17,7 +17,7 @@ app.use(cors());
 
 app.use("/api/auth", authRouter);
 
-app.use("/api/product", productRoute);
+app.use("/api/products", productRoute);
 
 app.get("/api/health", (req, res) => {
   res.json({

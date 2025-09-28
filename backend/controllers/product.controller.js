@@ -7,18 +7,12 @@ import productModel from "../models/product.model.js";
  */
 const product_all = async (req, res) => {
   const {
-    filterInput,
     page = 1,
-    pageLength = 10,
-    sortColumn,
     sortDirection,
   } = req.query;
 
   const products_paginated = await productModel.all({
-    filterInput,
     page,
-    pageLength,
-    sortColumn,
     sortDirection,
   });
 
@@ -36,9 +30,29 @@ const product_by_id = async (req, res) => {
   return res.json(product);
 };
 
+const product_create = async (req, res) => {
+
+   const { nombre, descripcion, precio, imagen, stock } = req.body; 
+   const product = await productModel.create({
+     nombre,
+     descripcion,
+     precio,
+     imagen,
+     stock,
+   });
+
+  if (!product) {
+    return res.status(500).json({ message: "Error creating product" });
+  }
+
+  return res.json(product);
+
+};
+
 const productController = {
   product_all,
   product_by_id,
+  product_create,
 };
 
 export default productController;

@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 /**
  * Metodo para devolver un elemento por su id
  */
@@ -22,52 +22,73 @@ const byId = async ({ id }) => {
  * Esta funcion devuelve una lista de productos
  * el metodo recibe un conjunto de parametros opcionales
  */
-const all = async ({
-  filterInput,
-  page = 1,
-  pageLength = 10,
-  sortColumn,
-  sortDirection,
-}) => {
+const all = async ({ page = 1, sortDirection }) => {
   try {
     const data = await readFile("db/products.json", "utf-8");
-    const allData = JSON.parse(data);
 
-    // Filtrar segun el parametro oocional filterInput
-    const filteredData = filterInput
-      ? allData.filter((e) => {
-          return (
-            e.nombre.toLowerCase().includes(filterInput.toLowerCase()) ||
-            e.descripcion.toLowerCase().includes(filterInput.toLowerCase())
-          );
-        })
-      : allData;
+    const allProductos = JSON.parse(data);
 
-    // Ordenamiento: segun los parametros sortColumn y sortDirection
+    let productosOrdenados = [];
+    if (sortDirection) {
+      productosOrdenados = allProductos.sort((a, b) => {
+        if (sortDirection === "mayor_menor") {
+          return a.precio > b.precio ? -1 : 1;
+        } else {
+          return a.precio < b.precio ? -1 : 1;
+        }
+      });
+    } else {
+      productosOrdenados = allProductos;
+    }
 
-    const sortCol = sortColumn ?? "id";
-    const sortedData =
-      sortColumn || sortDirection
-        ? filteredData.sort((a, b) => {
-            if (sortDirection === "desc") {
-              return a[sortCol] > b[sortCol] ? -1 : 1;
-            } else {
-              return a[sortCol] < b[sortCol] ? -1 : 1;
-            }
-          })
-        : filteredData;
+    const inicio = (page - 1) * 10;
+    const fin = page * 10;
 
-    // Paginación
-    return sortedData.slice((page - 1) * pageLength, page * pageLength);
+    return {
+      total: productosOrdenados.length,
+      productos: productosOrdenados.slice(inicio, fin),
+    };
   } catch (e) {
     console.error(e.message);
-    return []; // Devolver array vacío en caso de error
+
+    return [];
+  }
+};
+
+const create = async ({ nombre, descripcion, precio, imagen, stock }) => {
+  try {
+    const data = await readFile("db/products.json", "utf-8");
+
+    const products = JSON.parse(data);
+
+    let maxId = 0;
+    for (let i = 0; i < products.length; i++) {
+      if (maxId < products[i].id) maxId = products[i].id;
+    }
+
+    const created_product = {
+      id: maxId + 1,
+      nombre,
+      descripcion,
+      precio,
+      imagen,
+      stock,
+    };
+
+    products.push(created_product);
+
+    await writeFile("db/products.json", JSON.stringify(products, null, 2));
+
+    return created_product;
+  } catch (e) {
+    console.error(e.message);
   }
 };
 
 const productModel = {
   all,
   byId,
+  create,
 };
 
 export default productModel;

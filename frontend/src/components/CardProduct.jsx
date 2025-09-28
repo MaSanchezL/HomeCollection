@@ -3,14 +3,17 @@ import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import "../assets/css/CardProduct.css";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
 
 const CardProduct = () => {
   const { id } = useParams();
+
+  const { agregarProducto } = useContext(CartContext);
 
   const [product, setProduct] = useState({});
   const [cantidad, setCantidad] = useState(0);
@@ -18,7 +21,7 @@ const CardProduct = () => {
 
   const getProducyById = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/product/${id}`);
+      const res = await fetch(`http://localhost:3000/api/products/${id}`);
       const data = await res.json();
       setProduct(data);
     } catch (error) {
@@ -35,11 +38,17 @@ const CardProduct = () => {
   const sumar = () => setCantidad(cantidad + 1);
 
   const restar = () => {
-    if (cantidad === 0) return "No puedes restar màs productos";
+    if (cantidad === 0) return "No puedes restar más productos";
     setCantidad(cantidad - 1);
   };
 
-  const handleLikeClick = () => setLike(!like);
+  const handleLikeClick = () => {
+    setLike(!like);
+  };
+
+  const handleAddCartClick = () => {
+    agregarProducto(product, cantidad);
+  };
 
   return (
     <Card className="carta">
@@ -90,6 +99,7 @@ const CardProduct = () => {
                   variant="primary"
                   size="lg"
                   style={{ width: "250px", margin: "0 auto" }}
+                  onClick={handleAddCartClick}
                 >
                   Agregar al carrito
                 </Button>
@@ -104,6 +114,8 @@ const CardProduct = () => {
                     color={like ? "red" : "gray"} // cambia color según estado
                   />
                 </Button>
+
+                <Link to={`/galeria`}> Regresar a la Galería </Link>
               </div>
             </Card.Body>
           </Col>

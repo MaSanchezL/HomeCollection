@@ -9,13 +9,18 @@ import Form from "react-bootstrap/Form";
 
 const GaleriaProductos = () => {
   const [card, setCard] = useState([]);
+  const [totalProductos, setTotalProductos] = useState(0);
+  const [pageActive, setPageActive] = useState(1);
+  const [sortPrecio, setSortPrecio] = useState("menor_mayor");
 
   const getcard = async () => {
     try {
-    
-      const res = await fetch("http://localhost:3000/api/product/all");
+      const res = await fetch(
+        `http://localhost:3000/api/products/all?page=${pageActive}&sortDirection=${sortPrecio}`
+      );
       const data = await res.json();
-      setCard(data);
+      setCard(data.productos);
+      setTotalProductos(data.total);
     } catch (error) {
       alert(error.message);
     }
@@ -23,14 +28,29 @@ const GaleriaProductos = () => {
 
   useEffect(() => {
     getcard();
-  }, []);
+  }, [pageActive, sortPrecio]);
+
+  const handlePrev = () => {
+    if (pageActive > 1) setPageActive(pageActive - 1);
+  };
+
+  const handleNext = () => {
+    const ultimaPagina = totalProductos / 10;
+    if (pageActive < ultimaPagina) setPageActive(pageActive + 1);
+  };
 
   return (
     <>
-      <Form.Select className="" aria-label="Default select example">
+      <Form.Select
+        className=""
+        aria-label="Default select example"
+        onChange={(e) => {
+          setSortPrecio(e.target.value);
+        }}
+      >
         <option>Ordenar por</option>
-        <option value="1">Mayor a menor precio</option>
-        <option value="2">Menor a mayor</option>
+        <option value="mayor_menor">Mayor a menor precio</option>
+        <option value="menor_mayor">Menor a mayor</option>
       </Form.Select>
 
       <Container>
@@ -51,30 +71,20 @@ const GaleriaProductos = () => {
       <div className="pag">
         <nav aria-label="Page navigation example">
           <ul class="pagination">
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
+            <li class="page-item" onClick={handlePrev}>
+              <div class="page-link" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
-              </a>
+              </div>
             </li>
             <li class="page-item">
               <a class="page-link" href="#">
-                1
+                {pageActive}
               </a>
             </li>
-            <li class="page-item">
-              <a class="page-link" href="#">
-                2
-              </a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">
-                3
-              </a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
+            <li class="page-item" onClick={handleNext}>
+              <div class="page-link" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
-              </a>
+              </div>
             </li>
           </ul>
         </nav>
@@ -84,58 +94,3 @@ const GaleriaProductos = () => {
 };
 
 export default GaleriaProductos;
-
-/*
-let active = 2;
- let items = [];
- for (let number = 1; number <= 5; number++) {
-   items.push(
-     <Pagination.Item key={number} active={number === active}>
-       {number}
-     </Pagination.Item>
-   );
-
-
-
-
-<Pagination>{items}</Pagination>
-        <br />
-        
-        
-
-
-
-        filtros
-        
-        const [priceFilter, setPriceFilter] = useState("");
-
-const filteredProducts = card.filter((p) => {
-  if (priceFilter === "low") return p.precio < 200;
-  if (priceFilter === "medium") return p.precio >= 200 && p.precio < 600;
-  if (priceFilter === "high") return p.precio >= 600;
-  return true; // sin filtro
-});
-
-...
-
-<div className="mb-4">
-  <select
-    className="form-select"
-    value={priceFilter}
-    onChange={(e) => setPriceFilter(e.target.value)}
-  >
-    <option value="">Todos los precios</option>
-    <option value="low">Menos de $200</option>
-    <option value="medium">$200 - $599</option>
-    <option value="high">Más de $600</option>
-  </select>
-</div>
-
-        
-        
-        
-        
-        
-        
-        
-        */
