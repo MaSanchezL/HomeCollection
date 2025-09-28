@@ -7,6 +7,9 @@ import productRoute from "./routes/product.route.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const frontendDistPath = path.join(process.cwd(), "frontend", "dist");
+app.use(express.static(frontendDistPath));
+
 app.use(express.json());
 
 // Servir archivos estáticos del build de frontend

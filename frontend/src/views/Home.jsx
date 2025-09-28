@@ -1,4 +1,5 @@
 import Container from "react-bootstrap/Container";
+import { Link } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
@@ -60,7 +61,7 @@ function Home() {
               <hr style={{ flex: 1, borderColor: "var(--secundario)" }} />
             </Col>
             <Col xs="auto">
-              <span className="separator-text">PRODUCTOS EN OFERTA</span>
+              <span className="separator-text">PRODUCTOS MAS GUSTADOS</span>
             </Col>
             <Col className="d-flex align-items-center">
               <hr style={{ flex: 1, borderColor: "var(--secundario)" }} />
@@ -101,6 +102,8 @@ function Home() {
           <Row>
             <Col className="text-center">
               <Button
+                as={Link}
+                to="/Galeria"
                 style={{
                   backgroundColor: "var(--principal)",
                   borderColor: "var(--principal)",
