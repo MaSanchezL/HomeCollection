@@ -117,39 +117,6 @@ const Cart = () => {
           </Container>
         </Card.Body>
       </Card>
-      <Card className="carta-galeria">
-        <Card.Img variant="top" src={cart.imagen} />
-        <Card className="carta-galeria">
-          <Card.Img variant="top" src={cart.imagen} />
-        </Card>
-        <Card className="carta-galeria">
-          <Card.Img variant="top" src={cart.imagen} />
-        </Card>
-        <Card.Body className="texto">
-          <Card.Title></Card.Title>
-          <Card.Text></Card.Text>
-
-          <div class="container text-center">
-            <div class="row row-cols-2">
-              <div class="col fw-bold">Cantidad :</div>
-              <div class="col fw-bold">. 0 {cart.cantidad}</div>
-              <div class="col fw-bold">Total : </div>
-              <div class="col fw-bold">$ 0 {cart.total}</div>
-            </div>
-            <Card.Text></Card.Text>
-            <br />
-            <div className="d-flex align-items-center justify-content-center gap-4 mb-0">
-              <Button
-                variant="primary"
-                size="lg"
-                style={{ width: "250px", margin: "0 auto" }}
-              >
-                Finalizar Compra
-              </Button>
-            </div>
-          </div>
-        </Card.Body>
-      </Card>
     </>
   );
 };
