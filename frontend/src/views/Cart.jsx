@@ -69,7 +69,7 @@ const Cart = () => {
                     </span>
                   </Card.Body>
                 </Card>
-                <Card className="carta-galeria">
+                {/* <Card className="carta-galeria">
                   <Card.Body className="texto">
                     <Card.Title className="fw-bold">
                       Cantidad :{cart.cantidad}
@@ -86,11 +86,11 @@ const Cart = () => {
                       Finalizar Compra
                     </Button>
                   </Card.Body>
-                </Card>
+                </Card> */}
                 <br />
               </Row>
             </Col>
-            <Card className="texto">
+            <Card className="texto carta-galeria">
               <Card.Text></Card.Text>
               <div class="container text-center">
                 <div class="row row-cols-2">
@@ -107,7 +107,7 @@ const Cart = () => {
                     size="lg"
                     style={{ width: "250px", margin: "0 auto" }}
                   >
-                    Finalizar la Compra
+                    Finalizar Compra
                   </Button>
                 </div>
                 <Card.Text></Card.Text>
