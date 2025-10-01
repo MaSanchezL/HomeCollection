@@ -107,7 +107,7 @@ const Cart = () => {
                     size="lg"
                     style={{ width: "250px", margin: "0 auto" }}
                   >
-                    Finalizar Compra
+                    Finalizar la Compra
                   </Button>
                 </div>
                 <Card.Text></Card.Text>
