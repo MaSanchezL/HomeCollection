@@ -3,18 +3,15 @@ import { createRoot } from "react-dom/client";
 import "./assets/css/index.css";
 import App from "./App.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ProductProvider from "./context/ProductContext.jsx";
 import CartProvider from "./context/CartContext.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <UserProvider>
-      <ProductProvider>
-        <CartProvider>
-          <App />
-        </CartProvider>
-      </ProductProvider>
-    </UserProvider>
+    <CartProvider>
+      <UserProvider>
+        <App />
+      </UserProvider>
+    </CartProvider>
   </StrictMode>
 );

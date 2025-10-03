@@ -1,123 +1,130 @@
-import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import "../assets/css/CardProductGaleria.css";
-import CardBody from "react-bootstrap/esm/CardBody";
-import { Link } from "react-router-dom";
-
 import { Table } from "react-bootstrap";
-import { ProductContext } from "../context/ProductContext";
+import "../assets/css/CardProductGaleria.css";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-  const { data, setData } = useContext(ProductContext);
-  const { cart, agregarProducto } = useContext(CartContext);
-
-  console.log(data);
-  console.log("trae los productos");
-
-  console.log(cart);
-  console.log("no trae los agregados");
-
+  const {
+    cart,
+    totalProducts,
+    totalPrice,
+    agregarProducto,
+    quitarProducto,
+    quitarProductos,
+  } = useContext(CartContext);
+  const navigate = useNavigate();
+  const handleCheckout = () => {
+    navigate("/checkout-success");
+  };
   return (
-    <>
-      <Card>
-        <Card.Body>
-          <Container>
-            <Col>
-              <Row xs={1} sm={2} lg={3} className="g-6 m-2">
-                <Card className="carta-galeria">
-                  <Card.Img variant="top" src={cart.imagen} />
-                </Card>
-                <br />
-                <Card className="carta-galeria">
-                  <Card.Body className="texto">
-                    <Card.Title className="fw-bold">
-                      Nombre Producto: {cart.nombre}
-                    </Card.Title>
-                    <Card.Text className="fw-bold">
-                      Precio: {cart.precio}{" "}
-                    </Card.Text>
-                  </Card.Body>
-                  <Card.Body className="cantidad">
-                    <Button
-                      variant="outline-secondary"
-                      style={{ width: "60px", margin: "0 auto" }}
-                    >
-                      +
-                    </Button>
-                    <Button
-                      variant="outline-secondary"
-                      style={{ width: "60px", margin: "0 auto" }}
-                    ></Button>
-                    <Button
-                      variant="outline-secondary"
-                      style={{ width: "60px", margin: "0 auto" }}
-                    >
-                      -
-                    </Button>
-                    <span
-                      /* onClick={() => removePost(i)} */
-                      role="button"
-                    >
-                      ❌
-                    </span>
-                  </Card.Body>
-                </Card>
-                {/* <Card className="carta-galeria">
-                  <Card.Body className="texto">
-                    <Card.Title className="fw-bold">
-                      Cantidad :{cart.cantidad}
-                    </Card.Title>
-                    <Card.Text className="fw-bold">
-                      Total: {cart.total}{" "}
-                    </Card.Text>
+    <Container className="my-5">
+      <div className="carro">
+        <h3 className="mb-4">Detalles del Pedido:</h3>
 
-                    <Button
-                      variant="primary"
-                      size="lg"
-                      style={{ width: "250px", margin: "0 auto" }}
-                    >
-                      Finalizar Compra
-                    </Button>
-                  </Card.Body>
-                </Card> */}
-                <br />
-              </Row>
-            </Col>
-            <Card className="texto carta-galeria">
-              <Card.Text></Card.Text>
-              <div class="container text-center">
-                <div class="row row-cols-2">
-                  <div class="col fw-bold">Cantidad :</div>
-                  <div class="col fw-bold">. 0 {cart.cantidad}</div>
-                  <div class="col fw-bold">Total : </div>
-                  <div class="col fw-bold">$ 0 {cart.total}</div>
-                </div>
-                <Card.Text></Card.Text>
-                <br />
-                <div className="d-flex align-items-center justify-content-center gap-4 mb-0">
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    style={{ width: "250px", margin: "0 auto" }}
-                  >
-                    Finalizar Compra
-                  </Button>
-                </div>
-                <Card.Text></Card.Text>
-              </div>
-              <br />
-            </Card>
-          </Container>
-        </Card.Body>
-      </Card>
-    </>
+        {cart.length === 0 ? (
+          <p>El Carrito está vacío. ¡Agrega nuestros productos!</p>
+        ) : (
+          <>
+            <Table striped bordered hover responsive>
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Nombre</th>
+                  <th>Precio Unitario</th>
+                  <th>Cantidad</th>
+                  <th>Subtotal</th>
+                  <th>Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cart.map((item) => (
+                  <tr key={item.id}>
+                    <td>
+                      <img
+                        src={item.imagen}
+                        alt={item.nombre}
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </td>
+                    <td>{item.nombre}</td>
+                    <td>${item.precio.toFixed(0)}</td>
+                    <td>
+                      <Button
+                        variant="outline-secondary"
+                        size="sm"
+                        onClick={() => quitarProducto(item)}
+                        style={{ marginRight: "5px" }}
+                      >
+                        -
+                      </Button>
+                      <span className="mx-2">{item.count}</span>
+                      <Button
+                        variant="outline-secondary"
+                        size="sm"
+                        onClick={() => agregarProducto(item)}
+                        style={{ marginLeft: "5px" }}
+                      >
+                        +
+                      </Button>
+                    </td>
+                    <td>${(item.precio * item.count).toFixed(0)}</td>
+                    <td>
+                      <Button
+                        /*                         variant="danger"
+                         */ size="sm"
+                        onClick={() => quitarProductos(item, item.count)}
+                      >
+                        ❌
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+
+            <div className="text-end mt-4">
+              <h4>
+                Cantidad de Productos:{" "}
+                <span className="fw-bold">{totalProducts}</span>
+              </h4>
+              <h2>
+                Valor Total:{" "}
+                <span className="fw-bold">${totalPrice.toFixed(0)}</span>
+              </h2>
+            </div>
+            <div className="d-grid gap-2 mt-4">
+              <Button variant="primary" size="lg" className="buttonPagar">
+                <Link
+                  to="/galeria"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  Continuar Comprando
+                </Link>
+              </Button>
+            </div>
+            <div className="d-grid gap-2 mt-4">
+              <Button
+                variant="primary"
+                size="lg"
+                className="buttonPagar"
+                onClick={handleCheckout}
+                a
+              >
+                Finalizar Compra
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+    </Container>
   );
 };
 

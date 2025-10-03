@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -13,8 +13,10 @@ function Header() {
   const [cartItems, setCartItems] = useState(0);
   const { user } = useContext(UserContext);
 
-  const { totalProducts } = useContext(CartContext);
-
+  const { cart, totalProducts, total, totalPrice } = useContext(CartContext);
+  useEffect(() => {
+    console.log("ver lo que cart en el contexto", cart);
+  }, [cart]);
   return (
     <Navbar
       style={{ backgroundColor: "var(--principal)" }}
@@ -41,7 +43,10 @@ function Header() {
               backgroundColor: "red",
             }}
           >
-            {totalProducts > 0 ? totalProducts : ""}
+            <Nav.Link href="/cart" className="icon-hover">
+              🛒
+              {totalProducts > 0 ? totalProducts : ""}
+            </Nav.Link>
           </div>
           <Nav.Link href="/cart" className="icon-hover">
             <FontAwesomeIcon

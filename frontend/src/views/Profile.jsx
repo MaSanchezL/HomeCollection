@@ -20,6 +20,9 @@ function Profile() {
   const handleCrearProducto = () => {
     navigate("/crear-producto");
   };
+  const misPedidos = () => {
+    navigate("/pedidos");
+  };
 
   return (
     <Container className="py-5">
@@ -52,7 +55,13 @@ function Profile() {
             </ListGroup>
             <Row className="mt-4 align-items-center">
               <Col xs={4}>
-                <Button type="button" className="pedidos-button">
+                <Button
+                  type="button"
+                  className="pedidos-button"
+                  link
+                  to="/pedidos"
+                  onClick={misPedidos}
+                >
                   Mis Pedidos
                 </Button>
               </Col>
