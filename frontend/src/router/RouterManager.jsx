@@ -11,9 +11,8 @@ import CardProduct from "../components/CardProduct";
 import CrearProducto from "../views/CrearProducto.jsx";
 import NotFound from "../views/NotFound";
 import Cart from "../views/Cart.jsx";
-// import CardProduct from "../components/CardProduct";
-// import Pedidos from "../views/Pedidos";
-// import { CardHome } from "../components/CardHome";
+import CheckoutSuccess from "../views/CheckoutSuccess.jsx";
+import MisPedidos from "../views/MisPedidos.jsx";
 
 const RouterManager = () => {
   const token = true;
@@ -32,8 +31,8 @@ const RouterManager = () => {
           <Route path="/crear-producto" element={<CrearProducto />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/cart" element={<Cart />} />
-          {/*  <Route path="/checkout" element={<Checkout />} />
-          <Route path="/pedidos" element={<Pedidos />} /> */}
+          <Route path="/checkout-success" element={<CheckoutSuccess />} />
+          <Route path="/pedidos" element={<MisPedidos />} />
         </Routes>
       </BrowserRouter>
     </>
