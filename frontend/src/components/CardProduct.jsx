@@ -12,6 +12,7 @@ import { CartContext } from "../context/CartContext";
 
 const CardProduct = () => {
   const { id } = useParams();
+  const API_URL = import.meta.env.VITE_API_URL;
   const [product, setProduct] = useState({});
   const [cantidad, setCantidad] = useState(1);
   const [like, setLike] = useState(false);
@@ -19,7 +20,8 @@ const CardProduct = () => {
 
   const getProducyById = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/products/${id}`);
+    const res = await fetch(`${API_URL}/products/${id}`);
+
       const data = await res.json();
       setProduct(data);
     } catch (error) {

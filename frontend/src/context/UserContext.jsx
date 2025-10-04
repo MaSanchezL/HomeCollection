@@ -1,36 +1,58 @@
 import { createContext, useState, useEffect } from "react";
-import usuarios from "../../../backend/db/users.json";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // true mientras carga la sesión
+
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    fetch(`${API_URL}/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Token inválido o sesión expirada");
+        return res.json();
+      })
+      .then((data) => setUser({ ...data, token }))
+      .catch(() => logout())
+      .finally(() => setLoading(false));
   }, []);
 
-  const login = (email, password) => {
-    const usuarioEncontrado = usuarios.find(
-      (u) => u.email === email && u.password === password
-    );
-    if (usuarioEncontrado) {
-      setUser(usuarioEncontrado);
-      localStorage.setItem("user", JSON.stringify(usuarioEncontrado));
-      return true;
-    } else {
-      return false;
+  const login = async (email, password) => {
+    try {
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) return { success: false, message: data.message || "Error de login" };
+
+      localStorage.setItem("token", data.token);
+      setUser(data);
+      return { success: true };
+    } catch (err) {
+      console.error(err);
+      return { success: false, message: "Error de conexión" };
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-  };
-
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, setUser, login, logout, loading }}>
       {children}
     </UserContext.Provider>
   );

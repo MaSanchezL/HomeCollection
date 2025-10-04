@@ -9,21 +9,37 @@ import Button from "react-bootstrap/Button";
 import "../assets/css/Login.css";
 
 function Login() {
-  const { login } = useContext(UserContext);
+  
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = login(email, password);
+    setError("");
 
-    if (success) {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Correo o contraseña incorrectos");
+        return;
+      }
+      localStorage.setItem("user", JSON.stringify(data));
+      setUser(data);
+
       navigate("/profile");
-    } else {
-      setError("Correo o contraseña incorrectos");
+    } catch (err) {
+      console.error(err);
+      setError("Error de conexión con el servidor");
     }
   };
 

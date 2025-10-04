@@ -9,20 +9,19 @@ import ListGroup from "react-bootstrap/ListGroup";
 import "../assets/css/Login.css";
 
 function Profile() {
-  const { user, logout } = useContext(UserContext);
+  const { user, logout, loading } = useContext(UserContext);
   const navigate = useNavigate();
+
+  if (loading) return <p>Cargando usuario...</p>; // espera hasta verificar token
+  if (!user) return <p>No estás logueado</p>;
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
-  const handleCrearProducto = () => {
-    navigate("/crear-producto");
-  };
-  const misPedidos = () => {
-    navigate("/pedidos");
-  };
+  const handleCrearProducto = () => navigate("/crear-producto");
+  const misPedidos = () => navigate("/pedidos");
 
   return (
     <Container className="py-5">
@@ -33,7 +32,7 @@ function Profile() {
             <ListGroup variant="flush" className="mb-4">
               <ListGroup.Item>
                 <div className="fw-bold">Nombre Completo:</div>
-                <p className="mb-0">{user?.name || "Sin nombre"}</p>
+                <p className="mb-0">{user?.nombre || "Sin nombre"}</p>
               </ListGroup.Item>
               <ListGroup.Item>
                 <div className="fw-bold">Correo Electrónico:</div>
@@ -41,47 +40,33 @@ function Profile() {
               </ListGroup.Item>
               <ListGroup.Item>
                 <div className="fw-bold">Número de Documento:</div>
-                <p className="mb-0">{user?.documento || "No registrado"}</p>
+                <p className="mb-0">{user?.nro_documento || "No registrado"}</p>
               </ListGroup.Item>
               <ListGroup.Item>
                 <div className="fw-bold">Dirección:</div>
                 <p className="mb-0">{user?.direccion || "No registrada"}</p>
               </ListGroup.Item>
-              {/* {user?.admin && (
+              {user?.rol_administrador && (
                 <ListGroup.Item>
                   <p className="text-success fw-bold">Administrador</p>
                 </ListGroup.Item>
-              )} */}
+              )}
             </ListGroup>
             <Row className="mt-4 align-items-center">
               <Col xs={4}>
-                <Button
-                  type="button"
-                  className="pedidos-button"
-                  link
-                  to="/pedidos"
-                  onClick={misPedidos}
-                >
+                <Button type="button" className="pedidos-button" onClick={misPedidos}>
                   Mis Pedidos
                 </Button>
               </Col>
-              {user?.admin && (
+              {user?.rol_administrador && (
                 <Col xs={4}>
-                  <Button
-                    type="button"
-                    className="pedidos-button"
-                    onClick={handleCrearProducto}
-                  >
+                  <Button type="button" className="pedidos-button" onClick={handleCrearProducto}>
                     Crear Producto
                   </Button>
                 </Col>
               )}
               <Col xs={4}>
-                <Button
-                  type="button"
-                  className="logout-button"
-                  onClick={handleLogout}
-                >
+                <Button type="button" className="logout-button" onClick={handleLogout}>
                   Cerrar Sesión
                 </Button>
               </Col>
