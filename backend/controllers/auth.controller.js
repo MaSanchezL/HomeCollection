@@ -1,99 +1,112 @@
-import "dotenv/config";
+import pool from "../db.js";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { nanoid } from "nanoid";
-import { authModel } from "../models/auth.model.js";
-import { isValidEmail } from "../utils/validators/email.validate.js";
 
-const login = async (req, res) => {
+const authController = {};
+
+// LOGIN
+authController.login = async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    console.log("login-req-body", req.body);
+    const result = await pool.query(
+      "SELECT id, nombre, nro_documento, direccion, email, password, rol_administrador FROM users WHERE email = $1",
+      [email]
+    );
 
-    const { email = "", password = "" } = req.body;
+    if (result.rows.length === 0)
+      return res.status(401).json({ message: "Usuario o contraseña incorrectos" });
 
-    if (!email.trim() || !password.trim()) {
-      return res.status(400).json({ error: "Email and password are required" });
-    }
+    const user = result.rows[0];
+    const match = await bcrypt.compare(password, user.password);
 
-    if (!isValidEmail(email)) {
-      return res.status(400).json({ error: "Invalid email" });
-    }
+    if (!match)
+      return res.status(401).json({ message: "Usuario o contraseña incorrectos" });
 
-    if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ error: "Password must be at least 6 characters" });
-    }
+   const token = jwt.sign(
+  { id: user.id, email: user.email, rol_administrador: user.rol_administrador },
+  process.env.JWT_SECRET,
+  { expiresIn: "1d" }
+);
 
-    const user = await authModel.getUserByEmail(email);
-
-    if (!user) {
-      return res.status(400).json({ error: "User not found" });
-    }
-
-    if (user.password !== password) {
-      return res.status(400).json({ error: "Invalid password" });
-    }
-
-    const payload = { email, id: user.id };
-    const token = jwt.sign(payload, process.env.JWT_SECRET);
-
-    return res.json({ email, token });
-  } catch (error) {
-    // console.log(error);
-    return res.status(500).json({ error: "Server error:" + error.message });
+    // No enviamos la contraseña al frontend
+    delete user.password;
+    res.json({ ...user, token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error al autenticar usuario" });
   }
 };
 
-const register = async (req, res) => {
+// REGISTRO
+authController.register = async (req, res) => {
+  const { nombre, nro_documento, direccion, email, password, rol_administrador } =
+    req.body;
+
   try {
-    const { email = "", password = "" } = req.body;
+    const existing = await pool.query(
+      "SELECT id FROM users WHERE email = $1 OR nro_documento = $2",
+      [email, nro_documento]
+    );
 
-    if (!email.trim() || !password.trim()) {
-      return res.status(400).json({ error: "Email and password are required" });
+    if (existing.rows.length > 0) {
+      return res.status(400).json({ message: "Usuario ya existe" });
     }
 
-    if (!isValidEmail(email)) {
-      return res.status(400).json({ error: "Invalid email" });
-    }
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ error: "Password must be at least 6 characters" });
-    }
+    const result = await pool.query(
+      `INSERT INTO users (nombre, nro_documento, direccion, email, password, rol_administrador)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id, nombre, nro_documento, direccion, email, rol_administrador`,
+      [nombre, nro_documento, direccion, email, hashedPassword, rol_administrador || false]
+    );
 
-    const user = await authModel.getUserByEmail(email);
-    if (user) {
-      return res.status(400).json({ error: "User already exists" });
-    }
-    const newUser = { email, password, id: nanoid() };
-    await authModel.addUser(newUser);
+    const newUser = result.rows[0];
+    const token = jwt.sign(
+      { id: newUser.id, email: newUser.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
 
-    const payload = { email, id: newUser.id };
-    const token = jwt.sign(payload, process.env.JWT_SECRET);
-
-    return res.json({ email, token });
-  } catch (error) {
-    // console.log(error);
-    return res.status(500).json({ error: "Server error" });
+    res.status(201).json({ ...newUser, token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error al registrar usuario" });
   }
 };
 
-const me = async (req, res) => {
-  try {
-    const { email } = req.user;
-    const user = await authModel.getUserByEmail(email);
-    return res.json({ email, id: user.id });
-  } catch (error) {
-    // console.log(error);
-    return res.status(500).json({ error: "Server error" });
-  }
-};
+// USUARIO EN SESION
+authController.me = async (req, res) => {
+  const userId = req.user?.id;
+  if (!userId) return res.status(401).json({ message: "No autorizado" });
 
-const authController = {
-  login,
-  register,
-  me,
+  try {
+    const result = await pool.query(
+      `SELECT id, nombre, nro_documento, direccion, email, rol_administrador
+       FROM users
+       WHERE id = $1`,
+      [userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    const user = result.rows[0];
+
+    res.json({
+      id: user.id,
+      nombre: user.nombre || "",
+      nro_documento: user.nro_documento || "",
+      direccion: user.direccion || "",
+      email: user.email || "",
+      rol_administrador: user.rol_administrador || false,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error al obtener usuario" });
+  }
 };
 
 export default authController;
