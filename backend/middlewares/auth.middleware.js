@@ -1,19 +1,21 @@
-import "dotenv/config";
 import jwt from "jsonwebtoken";
 
-const authMiddleware = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  if (!authHeader) return res.status(401).json({ message: "No autorizado" });
 
-  const token = authHeader.split(" ")[1];
-
+const authMiddleware = async (req, res, next) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+    const token = req.header("Authorization");
+    if (!token) {
+      return res.status(400).json({ message: "el token debe estar presente" });
+    }
+    const extractToken = token.split(" ")[1];
+    console.log(token);
+    const decoded = jwt.verify(extractToken, process.env.JWT_SECRET);
+    req.user = decoded.email;
     next();
-  } catch {
-    res.status(401).json({ message: "Token inválido" });
+  } catch (error) {
+    return res.status(400).json({ message: "el token es invalido" });
   }
 };
 
-export default authMiddleware;
+export  default authMiddleware ;
+
