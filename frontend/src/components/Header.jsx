@@ -1,4 +1,3 @@
-import { useState, useContext, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -8,15 +7,19 @@ import { UserContext } from "../context/UserContext.jsx";
 import logo1 from "../assets/logo1.png";
 import "../assets/css/Header.css";
 import { CartContext } from "../context/CartContext";
+import { Link } from "react-router-dom";
+import Badge from "react-bootstrap/Badge";
+import { useContext } from "react";
 
 function Header() {
-  const [cartItems, setCartItems] = useState(0);
   const { user } = useContext(UserContext);
+  const { totalProducts } = useContext(CartContext);
 
-  const { cart, totalProducts, total, totalPrice } = useContext(CartContext);
-  useEffect(() => {
-    console.log("ver lo que cart en el contexto", cart);
-  }, [cart]);
+  const NavLinkItem = ({ to, children }) => (
+    <Nav.Link as={Link} to={to} className="mx-2 fw-bold">
+      {children}
+    </Nav.Link>
+  );
   return (
     <Navbar
       style={{ backgroundColor: "var(--principal)" }}
@@ -27,34 +30,25 @@ function Header() {
         fluid
         className="d-flex align-items-center justify-content-between px-0"
       >
-        <Navbar.Brand href="/home" className="ms-2">
+        <NavLinkItem to="/" className="ms-2">
           <img src={logo1} alt="Logo" className="logo-hover" />
-        </Navbar.Brand>
+        </NavLinkItem>
 
         <div className="header-title">HOME COLLECTION</div>
 
         <Nav className="d-flex align-items-center me-2">
-          <Nav.Link href={user ? "/profile" : "/login"} className="icon-hover">
+          <NavLinkItem to={user ? "/profile" : "/login"} className="icon-hover">
             <FontAwesomeIcon icon={faUser} size="2x" className="icon-hover" />
-          </Nav.Link>
-          <div
-            style={{
-              color: "white",
-              backgroundColor: "red",
-            }}
-          >
-            <Nav.Link href="/cart" className="icon-hover">
-              🛒
-              {totalProducts > 0 ? totalProducts : ""}
-            </Nav.Link>
-          </div>
-          <Nav.Link href="/cart" className="icon-hover">
+          </NavLinkItem>
+
+          <NavLinkItem to="/cart" className="icon-hover">
             <FontAwesomeIcon
               icon={faShoppingBag}
               size="2x"
               className="icon-hover"
             />
-          </Nav.Link>
+            {totalProducts}
+          </NavLinkItem>
         </Nav>
       </Container>
     </Navbar>
