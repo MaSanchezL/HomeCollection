@@ -19,8 +19,15 @@ function Header() {
   }, [user]);
 
   return (
-    <Navbar style={{ backgroundColor: "var(--principal)" }} variant="dark" sticky="top">
-      <Container fluid className="d-flex align-items-center justify-content-between px-0">
+    <Navbar
+      style={{ backgroundColor: "var(--principal)" }}
+      variant="dark"
+      sticky="top"
+    >
+      <Container
+        fluid
+        className="d-flex align-items-center justify-content-between px-0"
+      >
         <Navbar.Brand as={Link} to="/home">
           <img src={logo1} alt="Logo" className="logo-hover" />
         </Navbar.Brand>
