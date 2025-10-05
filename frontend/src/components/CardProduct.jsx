@@ -12,16 +12,16 @@ import { CartContext } from "../context/CartContext";
 
 const CardProduct = () => {
   const { id } = useParams();
-
-  const { agregarProducto } = useContext(CartContext);
-
+  const API_URL = import.meta.env.VITE_API_URL;
   const [product, setProduct] = useState({});
-  const [cantidad, setCantidad] = useState(0);
+  const [cantidad, setCantidad] = useState(1);
   const [like, setLike] = useState(false);
+  const { agregarProductos } = useContext(CartContext);
 
   const getProducyById = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/products/${id}`);
+    const res = await fetch(`${API_URL}/products/${id}`);
+
       const data = await res.json();
       setProduct(data);
     } catch (error) {
@@ -29,16 +29,19 @@ const CardProduct = () => {
     }
   };
 
-  useEffect(() => {
+  /*  useEffect(() => {
     if (id) {
       getProducyById();
     }
+  }, [id]); */
+  useEffect(() => {
+    getProducyById();
   }, [id]);
 
   const sumar = () => setCantidad(cantidad + 1);
 
   const restar = () => {
-    if (cantidad === 0) return "No puedes restar más productos";
+    if (cantidad > 0) return "No puedes restar más productos";
     setCantidad(cantidad - 1);
   };
 
@@ -46,9 +49,9 @@ const CardProduct = () => {
     setLike(!like);
   };
 
-  const handleAddCartClick = () => {
+  /*   const handleAddCartClick = () => {
     agregarProducto(product, cantidad);
-  };
+  }; */
 
   return (
     <Card className="carta">
@@ -72,11 +75,12 @@ const CardProduct = () => {
             <Card.Body className="cantidad">
               <Card.Text>Cantidad:</Card.Text>
               <Button
-                onClick={sumar}
+                onClick={restar}
                 variant="outline-secondary"
                 style={{ width: "90px", margin: "0 auto" }}
+                disabled={cantidad === 1}
               >
-                +
+                -
               </Button>
               <Button
                 variant="outline-secondary"
@@ -85,11 +89,11 @@ const CardProduct = () => {
                 {cantidad}
               </Button>
               <Button
-                onClick={restar}
+                onClick={sumar}
                 variant="outline-secondary"
                 style={{ width: "90px", margin: "0 auto" }}
               >
-                -
+                +
               </Button>
             </Card.Body>
 
@@ -99,7 +103,8 @@ const CardProduct = () => {
                   variant="primary"
                   size="lg"
                   style={{ width: "250px", margin: "0 auto" }}
-                  onClick={handleAddCartClick}
+                  /*                   onClick={handleAddCartClick}
+                   */ onClick={() => agregarProductos(product, cantidad)}
                 >
                   Agregar al carrito
                 </Button>
@@ -116,6 +121,7 @@ const CardProduct = () => {
                 </Button>
 
                 <Link to={`/galeria`}> Regresar a la Galería </Link>
+                <Link to={`/cart`}> Carro</Link>
               </div>
             </Card.Body>
           </Col>
