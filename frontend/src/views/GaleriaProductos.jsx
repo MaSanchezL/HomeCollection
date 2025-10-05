@@ -36,7 +36,7 @@ const GaleriaProductos = () => {
   };
 
   const handleNext = () => {
-    const ultimaPagina = Math.ceil(totalProductos / 10);
+    const ultimaPagina = Math.ceil(totalProductos / 6);
     if (pageActive < ultimaPagina) setPageActive(pageActive + 1);
   };
 
@@ -70,7 +70,10 @@ const GaleriaProductos = () => {
       <div className="pag">
         <nav aria-label="Navegación de páginas">
           <ul className="pagination justify-content-center">
-            <li className={`page-item ${pageActive === 1 ? "disabled" : ""}`} onClick={handlePrev}>
+            <li
+              className={`page-item ${pageActive === 1 ? "disabled" : ""}`}
+              onClick={handlePrev}
+            >
               <div className="page-link" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </div>
@@ -80,7 +83,7 @@ const GaleriaProductos = () => {
             </li>
             <li
               className={`page-item ${
-                pageActive === Math.ceil(totalProductos / 10) ? "disabled" : ""
+                pageActive === Math.ceil(totalProductos / 6) ? "disabled" : ""
               }`}
               onClick={handleNext}
             >
