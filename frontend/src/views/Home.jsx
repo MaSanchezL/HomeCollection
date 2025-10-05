@@ -35,21 +35,21 @@ function Home() {
           <Row className="g-4 mb-5 justify-content-center">
             <Col xs={12} md={4}>
               {renderCard(
-                "Categoria 1",
+                "Electrodomesticos",
                 "Descripción breve del producto 1.",
                 "https://placehold.co/300x200"
               )}
             </Col>
             <Col xs={12} md={4}>
               {renderCard(
-                "Categoria 2",
+                "Cocina",
                 "Descripción breve del producto 2.",
                 "https://placehold.co/300x200"
               )}
             </Col>
             <Col xs={12} md={4}>
               {renderCard(
-                "Categoria 3",
+                "Muebles",
                 "Descripción breve del producto 3.",
                 "https://placehold.co/300x200"
               )}

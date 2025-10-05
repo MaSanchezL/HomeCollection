@@ -13,6 +13,8 @@ import NotFound from "../views/NotFound";
 import Cart from "../views/Cart.jsx";
 import CheckoutSuccess from "../views/CheckoutSuccess.jsx";
 import MisPedidos from "../views/MisPedidos.jsx";
+import { UserContext } from "../context/UserContext.jsx";
+import { useContext } from "react";
 
 const RouterManager = () => {
   const { user, loading } = useContext(UserContext);
@@ -23,13 +25,28 @@ const RouterManager = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/home" element={<Home />} />
-      <Route path="/login" element={user ? <Navigate to="/profile" replace /> : <Login />} />
-      <Route path="/register" element={user ? <Navigate to="/profile" replace /> : <Register />} />
+      <Route
+        path="/login"
+        element={user ? <Navigate to="/profile" replace /> : <Login />}
+      />
+      <Route
+        path="/register"
+        element={user ? <Navigate to="/profile" replace /> : <Register />}
+      />
 
       {/* Rutas protegidas */}
-      <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" replace />} />
-      <Route path="/crear-producto" element={user ? <CrearProducto /> : <Navigate to="/login" replace />} />
-      <Route path="/pedidos" element={user ? <MisPedidos /> : <Navigate to="/login" replace />} />
+      <Route
+        path="/profile"
+        element={user ? <Profile /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/crear-producto"
+        element={user ? <CrearProducto /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/pedidos"
+        element={user ? <MisPedidos /> : <Navigate to="/login" replace />}
+      />
 
       {/* Rutas públicas */}
       <Route path="/galeria" element={<GaleriaProductos />} />

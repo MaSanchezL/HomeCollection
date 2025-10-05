@@ -67,9 +67,7 @@ const CartProvider = ({ children }) => {
         .filter((productoCart) => productoCart.count > 0)
     );
   };
-  const total = cart.reduce((acumulador, productoCart) => {
-    return acumulador + productoCart.precio * productoCart.count;
-  }, 0);
+
   const totalProducts = cart.reduce((acumulador, productoCart) => {
     return acumulador + productoCart.count;
   }, 0);
@@ -92,7 +90,6 @@ const CartProvider = ({ children }) => {
         quitarProductos,
         totalPrice,
         totalProducts,
-        total,
         clearCart,
       }}
     >
