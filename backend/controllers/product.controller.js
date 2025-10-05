@@ -2,7 +2,7 @@ import {
   byId,
   createProductModel,
   getAllProducts,
-  getFiltrosProducts,
+  
 } from "../models/product.model.js";
 
 
@@ -15,7 +15,7 @@ export const product_by_id = async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Producto no encontrado" });
     }
-    res.status(200).json({ product });
+    res.status(200).json( product );
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error al procesar solicitud" });
@@ -28,15 +28,16 @@ export const product_by_id = async (req, res) => {
 
 export const product_create = async (req, res) => {
   try {
-    const { nombre, descripcion, precio, imagen, stock } = req.body;
+    const { nombre, descripcion, precio, imagen,  categoria_id } = req.body;
     const newProduct = await createProductModel(
       nombre,
       descripcion,
       precio,
       imagen,
-      stock
+      
+      categoria_id
     );
-    res.status(200).json({ newProduct });
+    res.status(200).json( newProduct );
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error al procesar solicitud" });
@@ -60,7 +61,7 @@ export const product_all = async (req, res) => {
       limit,
       page,
     });
-    res.status(200).json({ product });
+    res.status(200).json( product );
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error al procesar solicitud" });

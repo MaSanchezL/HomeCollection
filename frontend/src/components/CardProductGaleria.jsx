@@ -10,7 +10,7 @@ const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
       <Card.Img variant="top" src={imagen} />
       <Card.Body className="texto">
         <Card.Title>{nombre}</Card.Title>
-        <Card.Text className="fw-bold">Precio: {precio.toFixed(0)} </Card.Text>
+        <Card.Text className="fw-bold">Precio: {parseFloat(precio).toFixed(0)} </Card.Text>
       </Card.Body>
 
       <Card.Body>
