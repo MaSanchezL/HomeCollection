@@ -16,9 +16,7 @@ const GaleriaProductos = () => {
 
   const getcard = async () => {
     try {
-      const res = await fetch(
-        `${API_URL}/api/products/all?page=${pageActive}&sortDirection=${sortPrecio}`
-      );
+  const res = await fetch(`${API_URL}/products/all?page=${pageActive}&sortDirection=${sortPrecio}`);
       const data = await res.json();
       setCard(data.productos);
       setTotalProductos(data.total);

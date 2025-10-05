@@ -4,54 +4,39 @@ import Table from "react-bootstrap/Table";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const MisPedidos = () => {
-  // ----------------------------------------------------------------------
-  // --- ESTADOS SIMULADOS (DEBEN SER LLENADOS POR TU API) ---
-  // ----------------------------------------------------------------------
-  const [orders, setOrders] = useState([]); // Lista de pedidos
-  const [loading, setLoading] = useState(true); // Estado de carga
-  const [error, setError] = useState(null); // Estado de error
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
   const handlePerfil = () => {
     navigate("/profile");
   };
-  // Simulación de carga de datos (¡Reemplaza esto con tu llamada real a la API!)
-  useEffect(() => {
-    // Simular una llamada API y obtener datos
-    setTimeout(() => {
-      const dataSimulada = [
-        {
-          id: "60d5ec498c3b6f00155b8e91",
-          date: "2024-10-01T10:00:00Z",
-          totalProducts: 3,
-          totalAmount: 159.97,
-          status: "Enviado",
-        },
-        {
-          id: "60d5ec498c3b6f00155b8e92",
-          date: "2024-09-25T14:30:00Z",
-          totalProducts: 1,
-          totalAmount: 99.5,
-          status: "Procesando",
-        },
-        // Descomenta la siguiente línea para simular un historial vacío:
-        // ...
-      ];
-      setOrders(dataSimulada);
-      // setOrders([]); // Usar para probar el estado "vacío"
-      setLoading(false);
-      // setError("Error de conexión con el servidor."); // Usar para probar el estado "error"
-    }, 1500);
-  }, []);
 
-  // ----------------------------------------------------------------------
-  // --- LÓGICA DE RENDERIZADO CONDICIONAL ---
-  // ----------------------------------------------------------------------
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/me`, {
+          credentials: "include", // si usas cookies
+        });
+
+        if (!res.ok) throw new Error("Error al obtener pedidos");
+
+        const data = await res.json();
+        setOrders(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   if (loading) {
     return (
@@ -81,19 +66,15 @@ const MisPedidos = () => {
       <Container className="my-5 text-center">
         <h2>Historial de Pedidos</h2>
         <Alert variant="info" className="mt-4">
-          <i className="bi bi-info-circle-fill me-2"></i>
           Aún no has realizado ningún pedido.
         </Alert>
-        <Button as={Link} to="/Galeria" variant="primary" className="mt-3">
+        <Button as={Link} to="/galeria" variant="primary" className="mt-3">
           Empezar a Comprar
         </Button>
       </Container>
     );
   }
 
-  // ----------------------------------------------------------------------
-  // --- VISTA DE TABLA DE PEDIDOS ---
-  // ----------------------------------------------------------------------
   return (
     <Container className="my-5">
       <h1 className="mb-4 text-center">Mi Historial de Pedidos</h1>
@@ -103,9 +84,7 @@ const MisPedidos = () => {
           <tr>
             <th>ID Pedido</th>
             <th>Fecha</th>
-            <th>Total Productos</th>
             <th>Monto Total</th>
-            <th>Estado</th>
             <th>Detalle</th>
           </tr>
         </thead>
@@ -113,22 +92,8 @@ const MisPedidos = () => {
           {orders.map((order) => (
             <tr key={order.id}>
               <td>#{order.id.slice(0, 8)}...</td>
-              {/* Formatea la fecha para mejor legibilidad */}
-              <td>{new Date(order.date).toLocaleDateString()}</td>
-              <td>{order.totalProducts}</td>
-              <td className="fw-bold">${order.totalAmount.toFixed(2)}</td>
-              <td>
-                {/* Asigna una clase de Bootstrap basada en el estado */}
-                <span
-                  className={`badge ${
-                    order.status === "Enviado"
-                      ? "bg-success"
-                      : "bg-warning text-dark"
-                  }`}
-                >
-                  {order.status}
-                </span>
-              </td>
+              <td>{new Date(order.created_at).toLocaleDateString()}</td>
+              <td className="fw-bold">${order.total_amount.toFixed(2)}</td>
               <td>
                 <Button
                   variant="outline-info"
@@ -143,13 +108,8 @@ const MisPedidos = () => {
           ))}
         </tbody>
       </Table>
-      <Button
-        type="button"
-        className="pedidos-button"
-        link
-        to="/profile"
-        onClick={handlePerfil}
-      >
+
+      <Button type="button" className="pedidos-button" onClick={handlePerfil}>
         Volver
       </Button>
     </Container>
