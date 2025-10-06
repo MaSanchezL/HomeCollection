@@ -58,7 +58,7 @@ const CardProduct = () => {
       <Container className="d-flex justify-content-center p-4">
         <Row>
           <Col md={6} className="columnas">
-            <Card.Img variant="top" src={product.imagen} />
+            <Card.Img variant="top" src={product.image_url} />
             <Card.Body>
               <Card.Text>{product.descripcion}</Card.Text>
             </Card.Body>

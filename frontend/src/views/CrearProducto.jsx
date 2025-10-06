@@ -10,7 +10,7 @@ const CrearProducto = () => {
 
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
-  const [stock, setStock] = useState("");
+  //const [stock, setStock] = useState("");
   const [imagen, setImagen] = useState("");
   const [descripcion, setDescripcion] = useState("");
 
@@ -20,7 +20,7 @@ const CrearProducto = () => {
     if (
       !nombre.trim() ||
       !precio.trim() ||
-      !stock.trim() ||
+      //!stock.trim() ||
       !imagen.trim() ||
       !descripcion.trim()
     ) {
@@ -31,9 +31,10 @@ const CrearProducto = () => {
     const nuevoProducto = {
       nombre,
       precio: Number(precio),
-      stock: Number(stock),
+      //stock: Number(stock),
       imagen,
       descripcion,
+      categoria_id: 1
     };
 
     try {
@@ -58,7 +59,7 @@ const CrearProducto = () => {
 
       setNombre("");
       setPrecio("");
-      setStock("");
+      //setStock("");
       setImagen("");
       setDescripcion("");
     } catch (error) {
@@ -90,15 +91,7 @@ const CrearProducto = () => {
           />
         </Form.Group>
 
-        <Form.Group className="mb-3 fw-bold" controlId="">
-          <Form.Label>Stock</Form.Label>
-          <Form.Control
-            type="number"
-            value={stock}
-            onChange={(e) => setStock(e.target.value)}
-            placeholder="Ingrese stock de producto"
-          />
-        </Form.Group>
+       
 
         <Form.Group className="mb-3 fw-bold" controlId="">
           <Form.Label>Imagen del Producto</Form.Label>
@@ -136,3 +129,18 @@ const CrearProducto = () => {
 };
 
 export default CrearProducto;
+
+
+
+
+ 
+
+/*<Form.Group className="mb-3 fw-bold" controlId="">
+   <Form.Label>Stock</Form.Label>
+   <Form.Control
+     type="number"
+     value={stock}
+     onChange={(e) => setStock(e.target.value)}
+     placeholder="Ingrese stock de producto"
+   />
+ </Form.Group>;*/

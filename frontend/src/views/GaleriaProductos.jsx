@@ -16,7 +16,7 @@ const GaleriaProductos = () => {
 
   const getcard = async () => {
     try {
-  const res = await fetch(`${API_URL}/products/all?page=${pageActive}&sortDirection=${sortPrecio}`);
+  const res = await fetch(`${API_URL}/products/all?page=${pageActive}&order_by=${sortPrecio}`);
       const data = await res.json();
       setCard(data.productos);
       setTotalProductos(data.total);
@@ -34,9 +34,15 @@ const GaleriaProductos = () => {
   };
 
   const handleNext = () => {
-    const ultimaPagina = Math.ceil(totalProductos / 10);
+    const ultimaPagina = Math.ceil(totalProductos / 6);
     if (pageActive < ultimaPagina) setPageActive(pageActive + 1);
   };
+
+  if (totalProductos===0){ 
+     
+    return <div>No existen elementos en la base de datos</div>;
+  }
+  console.log("total de productos", totalProductos)
 
   return (
     <>
@@ -52,12 +58,12 @@ const GaleriaProductos = () => {
 
       <Container>
         <Row xs={1} sm={2} lg={3} className="g-4 m-2">
-          {card.map((productos) => (
+          {card?.map((productos) => (
             <Col key={productos.id}>
               <CardProductGaleria
                 nombre={productos.nombre}
                 precio={productos.precio}
-                imagen={productos.imagen}
+                imagen={productos.image_url}
                 id={productos.id}
               />
             </Col>
@@ -68,7 +74,10 @@ const GaleriaProductos = () => {
       <div className="pag">
         <nav aria-label="Navegación de páginas">
           <ul className="pagination justify-content-center">
-            <li className={`page-item ${pageActive === 1 ? "disabled" : ""}`} onClick={handlePrev}>
+            <li
+              className={`page-item ${pageActive === 1 ? "disabled" : ""}`}
+              onClick={handlePrev}
+            >
               <div className="page-link" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </div>
@@ -78,7 +87,7 @@ const GaleriaProductos = () => {
             </li>
             <li
               className={`page-item ${
-                pageActive === Math.ceil(totalProductos / 10) ? "disabled" : ""
+                pageActive === Math.ceil(totalProductos / 6) ? "disabled" : ""
               }`}
               onClick={handleNext}
             >
