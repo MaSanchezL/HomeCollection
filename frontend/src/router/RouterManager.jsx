@@ -1,4 +1,7 @@
+import React, { useContext, useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext.jsx";
+
 import Home from "../views/Home";
 import Login from "../views/Login";
 import Register from "../views/Register";
@@ -10,8 +13,6 @@ import NotFound from "../views/NotFound";
 import Cart from "../views/Cart.jsx";
 import CheckoutSuccess from "../views/CheckoutSuccess.jsx";
 import MisPedidos from "../views/MisPedidos.jsx";
-import React, { useContext, useState, useEffect } from "react";
-
 
 const RouterManager = () => {
   const { user, loading } = useContext(UserContext);
