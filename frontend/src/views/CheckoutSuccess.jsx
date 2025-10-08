@@ -6,21 +6,9 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 
-// Necesitas agregar esta función a tu CartContext.jsx (ver sección 3)
-// const { clearCart } = useContext(CartContext);
-
 const CheckoutSuccess = () => {
-  // Usamos totalPrice y totalProducts para mostrar el resumen
   const { cart, totalPrice, totalProducts, clearCart } =
     useContext(CartContext);
-
-  // Utilizamos useEffect para vaciar el carrito al cargar la página
-  /*   useEffect(() => {
-    // Solo vaciamos el carrito si tiene algo
-    if (cart.length > 0) {
-      clearCart();
-    }
-  }, []);  */ // El array vacío asegura que se ejecute solo una vez al montar
 
   return (
     <Container className="my-5 d-flex justify-content-center">

@@ -49,7 +49,6 @@ function Register() {
         return;
       }
 
-      // Opcional: loguear automáticamente después del registro
       await login(email, password);
       navigate("/profile");
     } catch (err) {

@@ -4,16 +4,17 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // true mientras carga la sesión
+  const [loading, setLoading] = useState(true);
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
   };
 
   useEffect(() => {
+    debugger
     const token = localStorage.getItem("token");
     if (!token) {
       setLoading(false);

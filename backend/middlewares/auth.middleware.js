@@ -8,7 +8,7 @@ const authMiddleware = async (req, res, next) => {
       return res.status(400).json({ message: "el token debe estar presente" });
     }
     const extractToken = token.split(" ")[1];
-    console.log(token);
+    // console.log(token);
     const decoded = jwt.verify(extractToken, process.env.JWT_SECRET);
     req.user = decoded.email;
     next();
