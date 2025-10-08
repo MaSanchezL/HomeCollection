@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import Container from "react-bootstrap/Container";
@@ -9,12 +9,45 @@ import Button from "react-bootstrap/Button";
 import "../assets/css/Login.css";
 
 function Login() {
-  
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  const isTokenValid = (token) => {
+    if (!token) return false;
+    try {
+      const parts = token.split(".");
+      if (parts.length === 3) {
+        const payload = JSON.parse(atob(parts[1]));
+        if (payload?.exp) {
+          return Date.now() < payload.exp * 1000;
+        }
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const parsed = JSON.parse(userData);
+      const token = parsed.token;
+      if (isTokenValid(token)) {
+        setUser(parsed);
+        navigate("/profile", { replace: true });
+      } else {
+        localStorage.removeItem("user");
+      }
+    }
+    setCheckingSession(false);
+  }, [setUser, navigate]);
+
+  if (checkingSession) return <p>Cargando sesión...</p>;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,9 +66,9 @@ function Login() {
         setError(data.message || "Correo o contraseña incorrectos");
         return;
       }
+
       localStorage.setItem("user", JSON.stringify(data));
       setUser(data);
-
       navigate("/profile");
     } catch (err) {
       console.error(err);
@@ -60,6 +93,7 @@ function Login() {
                   required
                 />
               </Form.Group>
+
               <Form.Group className="mb-4" controlId="formBasicPassword">
                 <Form.Label>Contraseña</Form.Label>
                 <Form.Control
@@ -70,11 +104,14 @@ function Login() {
                   required
                 />
               </Form.Group>
+
               {error && <p className="text-danger">{error}</p>}
+
               <Button type="submit" className="login-button">
                 Ingresar
               </Button>
             </Form>
+
             <p className="text-center mt-3">
               ¿No tienes cuenta?{" "}
               <a href="/register" className="login-link">

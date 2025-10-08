@@ -46,11 +46,11 @@ function Profile() {
                 <div className="fw-bold">Dirección:</div>
                 <p className="mb-0">{user?.direccion || "No registrada"}</p>
               </ListGroup.Item>
-              {user?.rol_administrador && (
+              {/* {user?.rol_administrador && (
                 <ListGroup.Item>
                   <p className="text-success fw-bold">Administrador</p>
                 </ListGroup.Item>
-              )}
+              )} */}
             </ListGroup>
             <Row className="mt-4 align-items-center">
               <Col xs={4}>
