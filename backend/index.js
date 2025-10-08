@@ -15,7 +15,7 @@ app.use(express.json());
 const allowedOrigins = [process.env.FRONTEND_URL];
 app.use("/api", cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
+    if (!origin) return callback(null, true); 
     if (allowedOrigins.includes(origin)) return callback(null, true);
     return callback(new Error("No permitido por CORS"));
   },
