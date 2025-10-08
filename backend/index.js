@@ -10,10 +10,12 @@ import ordersRouter from "./routes/orders.route.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use("/api/auth", authRouter);
@@ -41,3 +43,5 @@ app.get("*", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
+
+export default app;
