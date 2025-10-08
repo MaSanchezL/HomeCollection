@@ -10,6 +10,8 @@ import NotFound from "../views/NotFound";
 import Cart from "../views/Cart.jsx";
 import CheckoutSuccess from "../views/CheckoutSuccess.jsx";
 import MisPedidos from "../views/MisPedidos.jsx";
+import React, { useContext, useState, useEffect } from "react";
+
 
 const RouterManager = () => {
   const { user, loading } = useContext(UserContext);
