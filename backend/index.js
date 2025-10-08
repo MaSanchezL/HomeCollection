@@ -13,8 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const allowedOrigins = [process.env.FRONTEND_URL];
-
-const corsOptions = {
+app.use("/api", cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
@@ -22,10 +21,7 @@ const corsOptions = {
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
-};
-
-app.use("/api", cors(corsOptions));
-app.options("/api/*", cors(corsOptions));
+}));
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRoute);
@@ -45,7 +41,7 @@ app.use("/api/*", (req, res) => {
 const frontendDist = path.join(process.cwd(), "../frontend/dist");
 app.use(express.static(frontendDist, { extensions: ["html"] }));
 
-app.get("*", (req, res) => {
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(frontendDist, "index.html"));
 });
 
