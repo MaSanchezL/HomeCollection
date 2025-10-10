@@ -1,4 +1,7 @@
+import React, { useContext, useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext.jsx";
+
 import Home from "../views/Home";
 import Login from "../views/Login";
 import Register from "../views/Register";
@@ -10,16 +13,15 @@ import NotFound from "../views/NotFound";
 import Cart from "../views/Cart.jsx";
 import CheckoutSuccess from "../views/CheckoutSuccess.jsx";
 import MisPedidos from "../views/MisPedidos.jsx";
-import { UserContext } from "../context/UserContext.jsx";
-import { useContext } from "react";
 
 const RouterManager = () => {
   const { user, loading } = useContext(UserContext);
 
-  if (loading) return <p>Cargando...</p>; // espera hasta verificar token
+  if (loading) return <p>Cargando...</p>;
 
   return (
     <Routes>
+      {/* Rutas públicas */}
       <Route path="/" element={<Home />} />
       <Route path="/home" element={<Home />} />
       <Route
@@ -30,6 +32,10 @@ const RouterManager = () => {
         path="/register"
         element={user ? <Navigate to="/profile" replace /> : <Register />}
       />
+      <Route path="/galeria" element={<GaleriaProductos />} />
+      <Route path="/producto/:id" element={<CardProduct />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout-success" element={<CheckoutSuccess />} />
 
       {/* Rutas protegidas */}
       <Route
@@ -64,6 +70,7 @@ const RouterManager = () => {
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout-success" element={<CheckoutSuccess />} />
 
+      {/* Ruta por defecto */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

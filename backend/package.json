@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest"
+    "test": "jest --forceExit --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +16,7 @@
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
-    "express": "^4.19.2",
+    "express": "^4.21.2",
     "jest": "^30.2.0",
     "jsonwebtoken": "^9.0.2",
     "nanoid": "^5.0.6",
@@ -28,13 +28,12 @@
     "nodemon": "^3.1.0",
     "supertest": "^7.1.4"
   },
-
- "jest": {
+  "jest": {
     "transform": {
       "^.+\\.js$": "babel-jest"
     },
     "collectCoverageFrom": [
-      "*/.js"
+      "**/*.js"
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/"

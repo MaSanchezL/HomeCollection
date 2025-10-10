@@ -10,12 +10,21 @@ import ordersRouter from "./routes/orders.route.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-}));
-
 app.use(express.json());
+
+const allowedOrigins = [process.env.FRONTEND_URL];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("No permitido por CORS"));
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
+
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRoute);
 app.use("/api/orders", ordersRouter);
@@ -32,9 +41,9 @@ app.use("/api/*", (req, res) => {
 });
 
 const frontendDist = path.join(process.cwd(), "../frontend/dist");
-app.use(express.static(frontendDist));
+app.use(express.static(frontendDist, { extensions: ["html"] }));
 
-app.get("*", (req, res) => {
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(frontendDist, "index.html"));
 });
 
@@ -42,4 +51,4 @@ app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
-export default app
+export default app;

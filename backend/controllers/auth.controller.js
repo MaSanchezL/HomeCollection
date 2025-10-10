@@ -29,7 +29,6 @@ authController.login = async (req, res) => {
   { expiresIn: "1d" }
 );
 
-    // No enviamos la contraseña al frontend
     delete user.password;
     res.json({ ...user, token });
   } catch (err) {
