@@ -1,12 +1,14 @@
 import { findUserByEmail } from "../models/auth.model.js";
-import { createFavorites } from "../models/favorites.model.js";
+import {
+  createFavorites,
+  deleteFavoriteByUserIdAndProducId,
+  existFavorites,
+} from "../models/favorites.model.js";
 import {
   byId,
   createProductModel,
   getAllProducts,
-  
 } from "../models/product.model.js";
-
 
 // GET. Obtener productos por el id.
 
@@ -14,39 +16,48 @@ export const product_by_id = async (req, res) => {
   try {
     const { id } = req.params;
     const product = await byId(id);
+
     if (!product) {
       return res.status(404).json({ message: "Producto no encontrado" });
     }
-    res.status(200).json( product );
+
+    if (req.user) {
+      
+      const emailUser = req.user;
+      const user = await findUserByEmail(emailUser);
+      const isFavorite = await existFavorites(user.id, id);
+
+      const productWithFavoriteInfo = { ...product, isFavorite };
+      return res.status(200).json(productWithFavoriteInfo);
+    }
+
+    return res.status(200).json(product);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error al procesar solicitud" });
     console.error("Error=>", error);
   }
 };
-
 
 // POST. Crear producto
 
 export const product_create = async (req, res) => {
   try {
-    const { nombre, descripcion, precio, imagen,  categoria_id } = req.body;
+    const { nombre, descripcion, precio, imagen, categoria_id } = req.body;
     const newProduct = await createProductModel(
       nombre,
       descripcion,
       precio,
-      imagen,      
+      imagen,
       categoria_id
     );
-    res.status(200).json( newProduct );
+    res.status(200).json(newProduct);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error al procesar solicitud" });
     console.error("Error=>", error);
   }
 };
-
-
 
 // GET. galería.
 
@@ -62,44 +73,80 @@ export const product_all = async (req, res) => {
       limit,
       page,
     });
-    res.status(200).json( product );
+    res.status(200).json(product);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error al procesar solicitud" });
     console.error("Error=>", error);
   }
 };
-
-
 
 // Put. Like
 
 export const product_like = async (req, res) => {
   try {
-    const emailUser= req.user;
-    const user= await findUserByEmail(emailUser)
+    const emailUser = req.user;
+    const user = await findUserByEmail(emailUser);
 
-    if(!user){
-      return res.status(403).json({ error: "Debe estar autenticado para crear favoritos" });
+    if (!user) {
+      return res
+        .status(403)
+        .json({ error: "Debe estar autenticado para crear favoritos" });
     }
     const { id } = req.params;
-    const like = await createFavorites(
-      user.id, id
-    )
+    const like = await createFavorites(user.id, id);
     res.status(200).json(like);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Error al procesar solicitud" });
+    res
+      .status(500)
+      .json({ error: "Error al procesar solicitud para crear favorito" });
     console.error("Error=>", error);
   }
 };
 
+export const product_unlike = async (req, res) => {
+  try {
+    const emailUser = req.user;
+    const user = await findUserByEmail(emailUser);
 
+    if (!user) {
+      return res
+        .status(403)
+        .json({ error: "Debe estar autenticado para eliminar favoritos" });
+    }
 
+    const { id } = req.params;
 
+    const exist = await existFavorites(user.id, id);
 
+    if (!exist) {
+      return res.status(400).json({
+        error:
+          "No existe en la base de datos un elemento favorito para el usuario y el producto.",
+      });
+    }
 
+    const deleted = await deleteFavoriteByUserIdAndProducId(user.id, id);
 
+    if (deleted) {
+      return res.status(200).json({
+        status: true,
+      });
+    }
+
+    return res.status(500).json({
+      error: "No se ha podido procesar la solicitud para eliminar favorito",
+    });
+
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "Error al procesar solicitud para eliminar favorito" });
+    console.error("Error=>", error);
+  }
+};
 
 /*import "dotenv/config";
 import jwt from "jsonwebtoken";

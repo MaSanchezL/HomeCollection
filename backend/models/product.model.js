@@ -10,15 +10,13 @@ export const byId = async (id) => {
   return productFormat(response.rows[0]);
 };
 
-
-
 // POST. Crear producto (formulario)
 
 export const createProductModel = async (
   nombre,
   descripcion,
   precio,
-  imagen,  
+  imagen,
   categoria_id
 ) => {
   const query =
@@ -37,8 +35,8 @@ export const getAllProducts = async ({
   limit = 6,
   page = 1,
 }) => {
-  const columna= "precio";
-  const orden= order_by==="menor_mayor"?"asc": "desc";
+  const columna = "precio";
+  const orden = order_by === "menor_mayor" ? "asc" : "desc";
   const offset = (page - 1) * limit;
   const filterQuery = getFiltrosProducts({ precio_max, precio_min, categoria });
   const formatQuery = format(
@@ -51,29 +49,20 @@ export const getAllProducts = async ({
   );
 
   const resultado = await pool.query(formatQuery);
-  const countQuery = format(
-    "SELECT COUNT(*)  FROM products %s",
-    filterQuery,
-    
-  );
+  const countQuery = format("SELECT COUNT(*)  FROM products %s", filterQuery);
 
   const totalResult = await pool.query(countQuery);
   const total = totalResult.rows[0].count;
 
   return {
     total: parseInt(total),
-    productos: resultado.rows.map((p)=>productFormat(p))    
+    productos: resultado.rows.map((p) => productFormat(p)),
   };
-
 };
 
 //galería - filtros;
 
-export const getFiltrosProducts =  ({
-  precio_max,
-  precio_min,
-  categoria,
-}) => {
+export const getFiltrosProducts = ({ precio_max, precio_min, categoria }) => {
   const filtros = [];
 
   if (precio_min) {
@@ -92,194 +81,12 @@ export const getFiltrosProducts =  ({
     return " WHERE " + filtros.join(" AND ");
   }
 
-  return ""
+  return "";
 };
 
-
-export const productFormat= (producto)=>{
-  return{
-    ...producto, precio: parseFloat(producto.precio)
-  }
+export const productFormat = (producto) => {
+   return {
+    ...producto,
+    precio: parseFloat(producto.precio),
+  };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//implementar
-
-export const isFavorite = async (userId, productId) => {
-  return true;
-};
-
-
-
-
-
-/*// GET. galería.
-export const getAllProducts = async ({
-  order_by = "id_ASC",
-  limit = 6,
-  page = 1,
-}) => {
-  const [columna, orden] = order_by.split("_");
-  const offset = (page - 1) * limit;
-  const formatQuery = format(
-    "SELECT * FROM products ORDER BY %s %s LIMIT %s OFFSET %s",
-    columna,
-    orden,
-    limit,
-    offset
-  );
-
-  const resultado = await pool.query(formatQuery);
-  return resultado.rows;
-};
-
-//galería - filtros;
-
-export const getFiltrosProducts = async ({
-  precio_max,
-  precio_min,
-  categoria,
-}) => {
-  const filtros = [];
-
-  if (precio_min) {
-    filtros.push(`precio >= ${precio_min}`);
-  }
-
-  if (precio_max) {
-    filtros.push(`precio <= ${precio_max}`);
-  }
-
-  if (categoria) {
-    filtros.push(`categoria= '${categoria}'`);
-  }
-
-  let consulta = "SELECT * FROM product";
-  if (filtros.length > 0) {
-    consulta += " WHERE " + filtros.join(" AND ");
-  }
-
-  const resultado = await pool.query(consulta);
-  return resultado.rows;
-};
-
-
-
-
-
-//implementar
-
-export const isFavorite = async (userId, productId) => {
-  return true;
-};
-
-
-
-
-
-
-/*import { readFile, writeFile } from "node:fs/promises";
- //Metodo para devolver un elemento por su id
-
-
-const byId = async ({ id }) => {
-  try {
-    const data = await readFile("db/products.json", "utf-8");
-    const allData = JSON.parse(data);
-
-    // Filtrar segun por el id
-    const digitId = parseInt(id);
-
-    return allData.find((e) => e.id === digitId);
-  } catch (e) {
-    console.error(e.message);
-    return []; // Devolver array vacío en caso de error
-  }
-};
-
-
- //Esta funcion devuelve una lista de productos
- //el metodo recibe un conjunto de parametros opcionales
- 
-const all = async ({ page = 1, sortDirection }) => {
-  try {
-    const data = await readFile("db/products.json", "utf-8");
-
-    const allProductos = JSON.parse(data);
-
-    let productosOrdenados = [];
-    if (sortDirection) {
-      productosOrdenados = allProductos.sort((a, b) => {
-        if (sortDirection === "mayor_menor") {
-          return a.precio > b.precio ? -1 : 1;
-        } else {
-          return a.precio < b.precio ? -1 : 1;
-        }
-      });
-    } else {
-      productosOrdenados = allProductos;
-    }
-
-    const inicio = (page - 1) * 10;
-    const fin = page * 10;
-
-    return {
-      total: productosOrdenados.length,
-      productos: productosOrdenados.slice(inicio, fin),
-    };
-  } catch (e) {
-    console.error(e.message);
-
-    return [];
-  }
-};
-
-const create = async ({ nombre, descripcion, precio, imagen, stock }) => {
-  try {
-    const data = await readFile("db/products.json", "utf-8");
-
-    const products = JSON.parse(data);
-
-    let maxId = 0;
-    for (let i = 0; i < products.length; i++) {
-      if (maxId < products[i].id) maxId = products[i].id;
-    }
-
-    const created_product = {
-      id: maxId + 1,
-      nombre,
-      descripcion,
-      precio,
-      imagen,
-      stock,
-    };
-
-    products.push(created_product);
-
-    await writeFile("db/products.json", JSON.stringify(products, null, 2));
-
-    return created_product;
-  } catch (e) {
-    console.error(e.message);
-  }
-};
-
-const productModel = {
-  all,
-  byId,
-  create,
-};
-
-export default productModel;*/

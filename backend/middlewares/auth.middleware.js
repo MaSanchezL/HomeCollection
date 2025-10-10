@@ -1,5 +1,23 @@
 import jwt from "jsonwebtoken";
 
+export const extractTokenMiddleware = async (req, res, next) => {
+  try {
+    const token = req.header("Authorization");
+
+    if (token) {
+      const extractToken = token.split(" ")[1];
+      const decoded = jwt.verify(extractToken, process.env.JWT_SECRET);
+      req.user = decoded.email;
+    }
+
+    next();
+  
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: "el token es invalido", desc: error.message });
+  }
+};
 
 const authMiddleware = async (req, res, next) => {
   try {
@@ -13,9 +31,10 @@ const authMiddleware = async (req, res, next) => {
     req.user = decoded.email;
     next();
   } catch (error) {
-    return res.status(400).json({ message: "el token es invalido" });
+    return res
+      .status(400)
+      .json({ message: "el token es invalido", desc: error.message });
   }
 };
 
-export  default authMiddleware ;
-
+export default authMiddleware;
