@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -17,12 +17,35 @@
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.19.2",
+    "jest": "^30.2.0",
     "jsonwebtoken": "^9.0.2",
     "nanoid": "^5.0.6",
     "pg": "^8.16.3",
     "pg-format": "^1.0.4"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "@babel/preset-env": "^7.28.3",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.1.4"
+  },
+
+ "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    },
+    "collectCoverageFrom": [
+      "*/.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      }
+    }
   }
 }

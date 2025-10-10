@@ -1,7 +1,4 @@
-import { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
-
 import Home from "../views/Home";
 import Login from "../views/Login";
 import Register from "../views/Register";
@@ -50,6 +47,19 @@ const RouterManager = () => {
 
       {/* Rutas públicas */}
       <Route path="/galeria" element={<GaleriaProductos />} />
+      <Route
+        path="/galeria/electrodomesticos"
+        element={<GaleriaProductos categoriaInicial={1} />}
+      />
+      <Route
+        path="/galeria/cocina"
+        element={<GaleriaProductos categoriaInicial={2} />}
+      />
+      <Route
+        path="/galeria/muebles"
+        element={<GaleriaProductos categoriaInicial={3} />}
+      />
+
       <Route path="/producto/:id" element={<CardProduct />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout-success" element={<CheckoutSuccess />} />

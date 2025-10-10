@@ -3,6 +3,7 @@ import {
   createProductModel,
   getAllProducts,
   
+  
 } from "../models/product.model.js";
 
 
@@ -33,8 +34,7 @@ export const product_create = async (req, res) => {
       nombre,
       descripcion,
       precio,
-      imagen,
-      
+      imagen,      
       categoria_id
     );
     res.status(200).json( newProduct );

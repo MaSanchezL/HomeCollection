@@ -10,14 +10,15 @@ export const byId = async (id) => {
   return productFormat(response.rows[0]);
 };
 
+
+
 // POST. Crear producto (formulario)
 
 export const createProductModel = async (
   nombre,
   descripcion,
   precio,
-  imagen,
-  
+  imagen,  
   categoria_id
 ) => {
   const query =
@@ -84,7 +85,7 @@ export const getFiltrosProducts =  ({
   }
 
   if (categoria) {
-    filtros.push(`categoria= '${categoria}'`);
+    filtros.push(` category_id= '${categoria}'`);
   }
 
   if (filtros.length > 0) {
@@ -100,6 +101,18 @@ export const productFormat= (producto)=>{
     ...producto, precio: parseFloat(producto.precio)
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //implementar

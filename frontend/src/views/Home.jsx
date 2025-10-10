@@ -6,14 +6,18 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import "../assets/css/Home.css";
 
-const renderCard = (title, text, imgSrc) => (
-  <Card className="text-center shadow home-card" style={{ height: "100%" }}>
-    <Card.Img variant="top" src={imgSrc} />
-    <Card.Body>
-      <Card.Title style={{ color: "var(--principal)" }}>{title}</Card.Title>
-      <Card.Text style={{ color: "var(--secundario)" }}>{text}</Card.Text>
-    </Card.Body>
-  </Card>
+
+
+const renderCard = (title, text, imgSrc, url) => (
+  <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
+    <Card className="text-center shadow home-card" style={{ height: "100%" }}>
+      <Card.Img variant="top" src={imgSrc} />
+      <Card.Body>
+        <Card.Title style={{ color: "var(--principal)" }}>{title}</Card.Title>
+        <Card.Text style={{ color: "var(--secundario)" }}>{text}</Card.Text>
+      </Card.Body>
+    </Card>
+  </Link>
 );
 
 function Home() {
@@ -37,21 +41,24 @@ function Home() {
               {renderCard(
                 "Electrodomesticos",
                 "Descripción breve del producto 1.",
-                "https://placehold.co/300x200"
+                "https://placehold.co/300x200",
+                "/galeria/electrodomesticos"
               )}
             </Col>
             <Col xs={12} md={4}>
               {renderCard(
                 "Cocina",
                 "Descripción breve del producto 2.",
-                "https://placehold.co/300x200"
+                "https://placehold.co/300x200",
+                "/galeria/cocina"
               )}
             </Col>
             <Col xs={12} md={4}>
               {renderCard(
                 "Muebles",
                 "Descripción breve del producto 3.",
-                "https://placehold.co/300x200"
+                "https://placehold.co/300x200",
+                "/galeria/muebles"
               )}
             </Col>
           </Row>
@@ -103,7 +110,7 @@ function Home() {
             <Col className="text-center">
               <Button
                 as={Link}
-                to="/Galeria"
+                to="/galeria"
                 style={{
                   backgroundColor: "var(--principal)",
                   borderColor: "var(--principal)",
