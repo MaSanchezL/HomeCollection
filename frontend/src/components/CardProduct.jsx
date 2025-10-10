@@ -29,6 +29,23 @@ const CardProduct = () => {
     }
   };
 
+
+  const isFavorite = async () => {
+    try {
+      const res = await fetch(`${API_URL}/products/like/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });     
+
+       await res.json();
+      
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   /*  useEffect(() => {
     if (id) {
       getProducyById();
@@ -47,8 +64,11 @@ const CardProduct = () => {
 
   const handleLikeClick = () => {
     setLike(!like);
+    if(!like){
+      isFavorite();
+    }
   };
-
+  
   /*   const handleAddCartClick = () => {
     agregarProducto(product, cantidad);
   }; */

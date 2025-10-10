@@ -1,8 +1,9 @@
+import { findUserByEmail } from "../models/auth.model.js";
+import { createFavorites } from "../models/favorites.model.js";
 import {
   byId,
   createProductModel,
   getAllProducts,
-  
   
 } from "../models/product.model.js";
 
@@ -71,9 +72,27 @@ export const product_all = async (req, res) => {
 
 
 
+// Put. Like
 
+export const product_like = async (req, res) => {
+  try {
+    const emailUser= req.user;
+    const user= await findUserByEmail(emailUser)
 
-
+    if(!user){
+      return res.status(403).json({ error: "Debe estar autenticado para crear favoritos" });
+    }
+    const { id } = req.params;
+    const like = await createFavorites(
+      user.id, id
+    )
+    res.status(200).json(like);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error al procesar solicitud" });
+    console.error("Error=>", error);
+  }
+};
 
 
 
