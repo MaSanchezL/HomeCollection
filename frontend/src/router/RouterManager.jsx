@@ -13,6 +13,7 @@ import NotFound from "../views/NotFound";
 import Cart from "../views/Cart.jsx";
 import CheckoutSuccess from "../views/CheckoutSuccess.jsx";
 import MisPedidos from "../views/MisPedidos.jsx";
+import EditarProducto from "../views/EditarProducto.jsx";
 
 const RouterManager = () => {
   const { user, loading } = useContext(UserContext);
@@ -47,6 +48,17 @@ const RouterManager = () => {
         element={
           user && user.rol_administrador ? (
             <CrearProducto />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+
+      <Route
+        path="/editar-producto/:id"
+        element={
+          user && user.rol_administrador ? (
+            <EditarProducto />
           ) : (
             <Navigate to="/login" replace />
           )
