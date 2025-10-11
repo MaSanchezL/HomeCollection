@@ -9,11 +9,12 @@ import {
 } from "../controllers/product.controller.js";
 import authMiddleware, {
   extractTokenMiddleware,
+  isAdminMiddleware,
 } from "../middlewares/auth.middleware.js";
 
 const productRoute = Router();
 
-productRoute.post("/create", product_create);
+productRoute.post("/create", isAdminMiddleware, product_create);
 
 productRoute.get("/all", product_all);
 

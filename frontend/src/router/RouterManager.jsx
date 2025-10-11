@@ -44,7 +44,13 @@ const RouterManager = () => {
       />
       <Route
         path="/crear-producto"
-        element={user ? <CrearProducto /> : <Navigate to="/login" replace />}
+        element={
+          user && user.rol_administrador ? (
+            <CrearProducto />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
       />
       <Route
         path="/pedidos"

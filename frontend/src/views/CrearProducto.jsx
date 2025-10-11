@@ -1,12 +1,15 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Container } from "react-bootstrap";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "../assets/css/CrearProducto.css";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const CrearProducto = () => {
   const navigate = useNavigate();
+
+  const{user}=useContext(UserContext);
 
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
@@ -42,6 +45,7 @@ const CrearProducto = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${user.token}` 
         },
         body: JSON.stringify(nuevoProducto),
       });
