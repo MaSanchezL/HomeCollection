@@ -85,8 +85,36 @@ export const getFiltrosProducts = ({ precio_max, precio_min, categoria }) => {
 };
 
 export const productFormat = (producto) => {
-   return {
+  return {
     ...producto,
     precio: parseFloat(producto.precio),
   };
+};
+
+export const deleteProduct = async (id) => {
+  const query = "DELETE FROM products WHERE id=$1";
+  const values = [id];
+  const response = await pool.query(query, values);
+  return response.rowCount > 0;
+};
+
+export const updateProduct = async (
+  id,
+  nombre,
+  descripcion,
+  precio,
+  imagen,
+  categoria_id
+) => {
+  console.log("categoria_id", categoria_id);
+  const query = `UPDATE products SET
+     nombre = $1, 
+     descripcion = $2, 
+     precio = $3, 
+     image_url = $4, 
+     category_id = $5
+    WHERE id = $6  RETURNING id, nombre, descripcion, precio, image_url, category_id`;
+  const values = [nombre, descripcion, precio, imagen, categoria_id, id];
+  const response = await pool.query(query, values);
+  return response.rows[0];
 };

@@ -7,7 +7,9 @@ import {
 import {
   byId,
   createProductModel,
+  deleteProduct,
   getAllProducts,
+  updateProduct,
 } from "../models/product.model.js";
 
 // GET. Obtener productos por el id.
@@ -22,7 +24,6 @@ export const product_by_id = async (req, res) => {
     }
 
     if (req.user) {
-      
       const emailUser = req.user;
       const user = await findUserByEmail(emailUser);
       const isFavorite = await existFavorites(user.id, id);
@@ -52,6 +53,25 @@ export const product_create = async (req, res) => {
       categoria_id
     );
     res.status(200).json(newProduct);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error al procesar solicitud" });
+    console.error("Error=>", error);
+  }
+};
+
+export const product_update = async (req, res) => {
+  try {
+    const { id, nombre, descripcion, precio, imagen, categoria_id } = req.body;
+    const updatedProduct = await updateProduct(
+      id,
+      nombre,
+      descripcion,
+      precio,
+      imagen,
+      categoria_id
+    );
+    res.status(200).json(updatedProduct);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error al procesar solicitud" });
@@ -138,12 +158,31 @@ export const product_unlike = async (req, res) => {
     return res.status(500).json({
       error: "No se ha podido procesar la solicitud para eliminar favorito",
     });
-
   } catch (error) {
     console.log(error);
     res
       .status(500)
       .json({ error: "Error al procesar solicitud para eliminar favorito" });
+    console.error("Error=>", error);
+  }
+};
+
+export const product_delete = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await deleteProduct(id);
+
+    if (!deleted) {
+      return res
+        .status(400)
+        .json({ error: "Error al intentar eliminar el producto" });
+    }
+
+    res.status(200).json({ status: "producto borrado correctamente" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error al procesar solicitud" });
     console.error("Error=>", error);
   }
 };

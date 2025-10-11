@@ -6,6 +6,8 @@ import {
   product_by_id,
   product_like,
   product_unlike,
+  product_delete,
+  product_update,
 } from "../controllers/product.controller.js";
 import authMiddleware, {
   extractTokenMiddleware,
@@ -16,9 +18,13 @@ const productRoute = Router();
 
 productRoute.post("/create", isAdminMiddleware, product_create);
 
+productRoute.post("/update", isAdminMiddleware, product_update);
+
 productRoute.get("/all", product_all);
 
 productRoute.get("/:id", extractTokenMiddleware, product_by_id);
+
+productRoute.delete("/delete/:id", isAdminMiddleware, product_delete);
 
 productRoute.put("/like/:id", authMiddleware, product_like);
 
