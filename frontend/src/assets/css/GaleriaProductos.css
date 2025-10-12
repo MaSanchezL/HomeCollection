@@ -31,3 +31,14 @@
 
 }
 
+.nav-item .nav-link{
+   color: var(--principal) !important;
+  
+ 
+
+}
+
+.nav-item .nav-link:hover{
+   color: var( --secundario)!important;
+
+}

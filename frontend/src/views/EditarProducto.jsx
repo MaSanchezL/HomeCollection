@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Container } from "react-bootstrap";
 import { useContext, useState } from "react";
-import "../assets/css/CrearProducto.css";
+import "../assets/css/EditarProducto.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { useEffect } from "react";
@@ -167,8 +167,9 @@ const EditarProducto = () => {
           </Form.Select>
         </Form.Group>
 
-        <div className="text-center">
+        <div className="botones">
           <Button
+            className="publicar"
             variant="primary"
             type="submit"
             size="lg"
@@ -176,9 +177,14 @@ const EditarProducto = () => {
           >
             Publicar producto
           </Button>
-          <Button variant="secondary" size="lg" 
-          onClick={deleteProduct}
-          style={{ width: "250px" }}>
+
+          <Button
+            className="eliminar"
+            variant="danger"
+            size="lg"
+            onClick={deleteProduct}
+            style={{ width: "250px" }}
+          >
             Eliminar producto
           </Button>
         </div>

@@ -24,20 +24,30 @@
   color: var(--principal);
 }
 
-.form .btn-primary {
+.form-select {
+  text-align: left;
+}
+
+.botones{
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+.publicar {
   background-color: var(--principal);
   border-color: var(--principal);
   font-weight: bold;
   margin-top: 20px;
 }
 
-.form .btn-primary:hover {
+.publicar:hover {
   background-color: var(--secundario);
   border-color: var(--secundario);
 }
 
-.form-select {
-  text-align: left;
+.eliminar{
+  font-weight: bold;
+  margin-top: 20px;
 }
-
 
