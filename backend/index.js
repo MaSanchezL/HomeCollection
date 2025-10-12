@@ -15,9 +15,14 @@ app.use(express.json());
 const allowedOrigins = [process.env.FRONTEND_URL];
 app.use(
   cors({
-    origin: function (origin, callback) {
+    origin: (origin, callback) => {
+      const allowedOrigins = [process.env.FRONTEND_URL];
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
+
+      const normalizedOrigin = origin.replace(/\/$/, "");
+      const isAllowed = allowedOrigins.some(o => o.replace(/\/$/, "") === normalizedOrigin);
+
+      if (isAllowed) return callback(null, true);
       return callback(new Error("No permitido por CORS"));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
