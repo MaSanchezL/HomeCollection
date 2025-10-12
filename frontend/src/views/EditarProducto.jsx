@@ -3,27 +3,70 @@ import Form from "react-bootstrap/Form";
 import { Container } from "react-bootstrap";
 import { useContext, useState } from "react";
 import "../assets/css/CrearProducto.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { useEffect } from "react";
 
-const CrearProducto = () => {
+const API_URL = import.meta.env.VITE_API_URL;
 
+const EditarProducto = () => {
   const navigate = useNavigate();
 
-  const{user}=useContext(UserContext);
+  const { id } = useParams();
+
+  const { user } = useContext(UserContext);
 
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
   const [imagen, setImagen] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [categoria, setCategoria] = useState("0");
+  const [categoria, setCategoria] = useState("");
+
+  const getProducyById = async () => {
+    try {
+      const res = await fetch(`${API_URL}/products/${id}`);
+
+      const data = await res.json();
+      setNombre(data.nombre);
+      setPrecio(data.precio);
+      setImagen(data.image_url);
+      setDescripcion(data.descripcion);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const deleteProduct = async () => {
+    try {
+      const res = await fetch(`${API_URL}/products/delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        }
+    });
+     const data = await res.json();
+        alert(data.status)
+
+        
+           navigate(`/galeria`);
+     
+      
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getProducyById();
+  }, [id]);
 
   const validarInput = async (e) => {
     e.preventDefault();
-
+    console.log(typeof precio);
     if (
       !nombre.trim() ||
-      !precio.trim() ||
+      !precio.toString().trim() ||
       !imagen.trim() ||
       !descripcion.trim() ||
       !categoria.trim()
@@ -32,7 +75,8 @@ const CrearProducto = () => {
       return;
     }
 
-    const nuevoProducto = {
+    const productoEditado = {
+      id: id,
       nombre,
       precio: Number(precio),
       imagen,
@@ -41,30 +85,25 @@ const CrearProducto = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/api/products/create", {
+      const res = await fetch("http://localhost:3000/api/products/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${user.token}` 
+          Authorization: `Bearer ${user.token}`,
         },
-        body: JSON.stringify(nuevoProducto),
+        body: JSON.stringify(productoEditado),
       });
 
       if (!res.ok)
-        throw new Error(data.message || "Error al crear el producto");
+        throw new Error(data.message || "Error al editar el producto");
 
       const data = await res.json();
 
-      alert("Producto creado correctamente");
+      alert("Producto editado correctamente");
 
       if (data.id) {
         navigate(`/producto/${data.id}`);
       }
-
-      setNombre("");
-      setPrecio("");
-      setImagen("");
-      setDescripcion("");
     } catch (error) {
       alert(error.message);
     }
@@ -72,7 +111,7 @@ const CrearProducto = () => {
 
   return (
     <Container className="my-4 p-4">
-      <h2 className="titulo">CREAR PRODUCTO</h2>
+      <h2 className="titulo">EDITAR PRODUCTO</h2>
       <Form onSubmit={validarInput} className="form">
         <Form.Group className="mb-3 fw-bold" controlId="">
           <Form.Label>Nombre del producto</Form.Label>
@@ -122,7 +161,6 @@ const CrearProducto = () => {
             onChange={(e) => setCategoria(e.target.value)}
             value={categoria}
           >
-            <option value="0">Ingrese la categoria del producto</option>
             <option value="1">Electrodomésticos</option>
             <option value="2">Cocina</option>
             <option value="3">Muebles</option>
@@ -138,15 +176,15 @@ const CrearProducto = () => {
           >
             Publicar producto
           </Button>
+          <Button variant="secondary" size="lg" 
+          onClick={deleteProduct}
+          style={{ width: "250px" }}>
+            Eliminar producto
+          </Button>
         </div>
       </Form>
     </Container>
   );
 };
 
-export default CrearProducto;
-
-
-
-
- 
+export default EditarProducto;
