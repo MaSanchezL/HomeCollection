@@ -14,8 +14,8 @@ const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
   const navigate = useNavigate();
 
   const handleEditClick = () => {
-    navigate(`/editar-producto/:id`);
-  };
+    navigate(`/editar-producto/${id}`);
+  }
 
   return (
     <Card className="carta-galeria">
@@ -31,21 +31,25 @@ const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
           <Button
             variant="primary"
             size="lg"
-            style={{ width: "200px", margin: "0 auto" }}
+            style={{ width: "150px", margin: "0 auto" }}
           >
             Ver más
           </Button>
         </Link>
       </Card.Body>
-      <Card.Footer>
+      <Card.Body className="d-flex justify-content-end">
         {user && user.rol_administrador && (
-          <Button onClick={handleEditClick}>
+          <Button
+            onClick={handleEditClick}
+            style={{ border: "none", backgroundColor: "transparent" }}
+          >
             <FontAwesomeIcon icon={faFilePen} size="2x" color="blue" />
           </Button>
         )}
-      </Card.Footer>
+      </Card.Body>
     </Card>
   );
 };
+
 
 export default CardProductGaleria;
