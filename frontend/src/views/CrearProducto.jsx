@@ -7,15 +7,16 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 const CrearProducto = () => {
+
   const navigate = useNavigate();
 
   const{user}=useContext(UserContext);
 
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
-  //const [stock, setStock] = useState("");
   const [imagen, setImagen] = useState("");
   const [descripcion, setDescripcion] = useState("");
+  const [categoria, setCategoria] = useState("0");
 
   const validarInput = async (e) => {
     e.preventDefault();
@@ -23,9 +24,9 @@ const CrearProducto = () => {
     if (
       !nombre.trim() ||
       !precio.trim() ||
-      //!stock.trim() ||
       !imagen.trim() ||
-      !descripcion.trim()
+      !descripcion.trim() ||
+      !categoria.trim()
     ) {
       alert("Todos los campos son obligatorios");
       return;
@@ -34,10 +35,9 @@ const CrearProducto = () => {
     const nuevoProducto = {
       nombre,
       precio: Number(precio),
-      //stock: Number(stock),
       imagen,
       descripcion,
-      categoria_id: 1
+      categoria_id: categoria,
     };
 
     try {
@@ -63,7 +63,6 @@ const CrearProducto = () => {
 
       setNombre("");
       setPrecio("");
-      //setStock("");
       setImagen("");
       setDescripcion("");
     } catch (error) {
@@ -95,8 +94,6 @@ const CrearProducto = () => {
           />
         </Form.Group>
 
-       
-
         <Form.Group className="mb-3 fw-bold" controlId="">
           <Form.Label>Imagen del Producto</Form.Label>
           <Form.Control
@@ -115,6 +112,21 @@ const CrearProducto = () => {
             onChange={(e) => setDescripcion(e.target.value)}
             placeholder="Ingrese una descripción del Producto"
           />
+        </Form.Group>
+
+        <Form.Group className="mb-3 fw-bold" controlId="">
+          <Form.Label>Categoría del Producto</Form.Label>
+          <Form.Select
+            className="mb-3"
+            aria-label="categoria productos"
+            onChange={(e) => setCategoria(e.target.value)}
+            value={categoria}
+          >
+            <option value="0">Ingrese la categoria del producto</option>
+            <option value="1">Electrodomésticos</option>
+            <option value="2">Cocina</option>
+            <option value="3">Muebles</option>
+          </Form.Select>
         </Form.Group>
 
         <div className="text-center">
@@ -138,13 +150,3 @@ export default CrearProducto;
 
 
  
-
-/*<Form.Group className="mb-3 fw-bold" controlId="">
-   <Form.Label>Stock</Form.Label>
-   <Form.Control
-     type="number"
-     value={stock}
-     onChange={(e) => setStock(e.target.value)}
-     placeholder="Ingrese stock de producto"
-   />
- </Form.Group>;*/
