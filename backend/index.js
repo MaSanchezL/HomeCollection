@@ -45,10 +45,16 @@ app.use(cors({
 
 // Preflight OPTIONS
 app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", allowedOrigins.join(","));
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.sendStatus(200);
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(403);
+  }
 });
 
 app.use(express.json());
