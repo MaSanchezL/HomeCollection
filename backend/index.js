@@ -1,39 +1,46 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
 import "dotenv/config";
+import pkg from "pg";
 
-import authRouter from "./routes/auth.route.js";
-import productRoute from "./routes/product.route.js";
-import ordersRouter from "./routes/orders.route.js";
+const { Pool } = pkg;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ Lista explícita de orígenes permitidos
+// 🔹 Conexión a PostgreSQL
+const pool = new Pool({
+  user: "dbhc_user",
+  host: "dpg-d3i5cfc9c44c73agd4bg-a.oregon-postgres.render.com",
+  database: "dbhc",
+  password: "POvhOOHCm8zB36ZKGFE2ifTmrZNYCirK",
+  port: 5432,
+});
+
+pool.query("SELECT NOW()")
+  .then(res => console.log("✅ DB conectada:", res.rows[0]))
+  .catch(err => console.error("❌ Error DB:", err));
+
+// 🔹 Middleware CORS
 const allowedOrigins = [
-  "https://homecollection.onrender.com", // Frontend desplegado en Render
-  "http://localhost:5173",               // Desarrollo local (Vite)
+  "https://homecollection.onrender.com",
+  "http://localhost:5173",
 ];
 
-// ✅ Middleware CORS principal
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // Permitir sin origin (Postman, SSR)
-      const normalized = origin.replace(/\/$/, "");
-      const allowed = allowedOrigins.some(o => o.replace(/\/$/, "") === normalized);
-      if (allowed) return callback(null, true);
-      console.warn("🚫 Bloqueado por CORS:", origin);
-      return callback(new Error("No permitido por CORS"));
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    const normalized = origin.replace(/\/$/, "");
+    const allowed = allowedOrigins.some(o => o.replace(/\/$/, "") === normalized);
+    if (allowed) return callback(null, true);
+    console.warn("🚫 Bloqueado por CORS:", origin);
+    return callback(new Error("No permitido por CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+}));
 
-// 🔧 Manejo manual de preflight (OPTIONS)
 app.options("*", (req, res) => {
   res.header("Access-Control-Allow-Origin", allowedOrigins.join(","));
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -41,35 +48,28 @@ app.options("*", (req, res) => {
   res.sendStatus(200);
 });
 
-// Middleware JSON
 app.use(express.json());
 
-// 🔌 Rutas API
-app.use("/api/auth", authRouter);
-app.use("/api/products", productRoute);
-app.use("/api/orders", ordersRouter);
-
-// 🩺 Ruta de salud
-app.get("/api/health", (req, res) => {
-  res.json({ success: true, message: "Servidor funcionando correctamente" });
+// 🔹 Endpoint de prueba de login
+app.post("/api/auth/login", (req, res) => {
+  const { email, password } = req.body;
+  console.log("Login recibido:", email);
+  // Devuelve dummy data para testear CORS y fetch
+  res.json({ success: true, token: "dummy-token", email });
 });
 
-// ❌ Manejo 404 para API
-app.use("/api/*", (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Ruta no encontrada: ${req.method} ${req.originalUrl}`,
-  });
+// 🔹 Endpoint de prueba DB
+app.get("/api/test-db", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT NOW()");
+    res.json({ success: true, time: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Error DB" });
+  }
 });
 
-// 🧱 Servir el frontend (React build)
-const frontendDist = path.join(process.cwd(), "../frontend/dist");
-app.use(express.static(frontendDist, { extensions: ["html"] }));
-app.get(/^\/(?!api).*/, (req, res) => {
-  res.sendFile(path.join(frontendDist, "index.html"));
-});
-
-// 🚀 Servidor
+// 🔹 Servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
