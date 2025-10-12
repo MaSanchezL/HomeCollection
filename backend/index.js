@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
 import "dotenv/config";
 import pkg from "pg";
 
@@ -8,16 +9,14 @@ const { Pool } = pkg;
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 🔹 Conexión a PostgreSQL
+// 🔹 Conexión a PostgreSQL con SSL
 const pool = new Pool({
   user: "dbhc_user",
   host: "dpg-d3i5cfc9c44c73agd4bg-a.oregon-postgres.render.com",
   database: "dbhc",
   password: "POvhOOHCm8zB36ZKGFE2ifTmrZNYCirK",
   port: 5432,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: { rejectUnauthorized: false }, // necesario en Render
 });
 
 pool.query("SELECT NOW()")
@@ -32,7 +31,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
+    if (!origin) return callback(null, true); // Postman o SSR
     const normalized = origin.replace(/\/$/, "");
     const allowed = allowedOrigins.some(o => o.replace(/\/$/, "") === normalized);
     if (allowed) return callback(null, true);
@@ -44,6 +43,7 @@ app.use(cors({
   credentials: true,
 }));
 
+// Preflight OPTIONS
 app.options("*", (req, res) => {
   res.header("Access-Control-Allow-Origin", allowedOrigins.join(","));
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -53,15 +53,13 @@ app.options("*", (req, res) => {
 
 app.use(express.json());
 
-// 🔹 Endpoint de prueba de login
+// 🔹 Endpoints de prueba
 app.post("/api/auth/login", (req, res) => {
   const { email, password } = req.body;
   console.log("Login recibido:", email);
-  // Devuelve dummy data para testear CORS y fetch
   res.json({ success: true, token: "dummy-token", email });
 });
 
-// 🔹 Endpoint de prueba DB
 app.get("/api/test-db", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
@@ -70,6 +68,15 @@ app.get("/api/test-db", async (req, res) => {
     console.error(err);
     res.status(500).json({ success: false, message: "Error DB" });
   }
+});
+
+// 🔹 Servir frontend
+const frontendDist = path.join(process.cwd(), "../frontend/dist");
+app.use(express.static(frontendDist, { extensions: ["html"] }));
+
+// Todas las rutas que no sean /api/* servirán index.html
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(frontendDist, "index.html"));
 });
 
 // 🔹 Servidor
