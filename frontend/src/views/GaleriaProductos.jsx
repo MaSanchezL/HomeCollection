@@ -3,20 +3,26 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
+import Nav from "react-bootstrap/Nav"
 import CardProductGaleria from "../components/CardProductGaleria.jsx";
 import "../assets/css/GaleriaProductos.css";
 
-const GaleriaProductos = () => {
+const GaleriaProductos = ({categoriaInicial}) => {
   const [card, setCard] = useState([]);
   const [totalProductos, setTotalProductos] = useState(0);
   const [pageActive, setPageActive] = useState(1);
   const [sortPrecio, setSortPrecio] = useState("menor_mayor");
+  const [categoria, setCategoria] = useState(categoriaInicial??0);
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
   const getcard = async () => {
     try {
-  const res = await fetch(`${API_URL}/products/all?page=${pageActive}&order_by=${sortPrecio}`);
+      let url= `${API_URL}/products/all?page=${pageActive}&order_by=${sortPrecio}`;
+      if(categoria!==0){
+        url= `${API_URL}/products/all?categoria=${categoria}&page=${pageActive}&order_by=${sortPrecio}`;
+      }
+      const res = await fetch(url);
       const data = await res.json();
       setCard(data.productos);
       setTotalProductos(data.total);
@@ -27,7 +33,7 @@ const GaleriaProductos = () => {
 
   useEffect(() => {
     getcard();
-  }, [pageActive, sortPrecio]);
+  }, [pageActive, sortPrecio, categoria]);
 
   const handlePrev = () => {
     if (pageActive > 1) setPageActive(pageActive - 1);
@@ -44,8 +50,31 @@ const GaleriaProductos = () => {
   }
   console.log("total de productos", totalProductos)
 
+
   return (
     <>
+      <Nav
+        variant="tabs"
+        activeKey={categoria}
+        onSelect={(selectedKey) =>
+          setCategoria(selectedKey ? parseInt(selectedKey) : null)
+        }
+        className="mb-4 justify-content-center"
+      >
+        <Nav.Item>
+          <Nav.Link eventKey="0">Todos</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="1">Electrodomésticos</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="2">Cocina</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="3">Muebles</Nav.Link>
+        </Nav.Item>
+      </Nav>
+
       <Form.Select
         className="mb-3"
         aria-label="Ordenar productos"
@@ -103,3 +132,7 @@ const GaleriaProductos = () => {
 };
 
 export default GaleriaProductos;
+
+
+
+

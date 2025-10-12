@@ -13,6 +13,7 @@ import NotFound from "../views/NotFound";
 import Cart from "../views/Cart.jsx";
 import CheckoutSuccess from "../views/CheckoutSuccess.jsx";
 import MisPedidos from "../views/MisPedidos.jsx";
+import EditarProducto from "../views/EditarProducto.jsx";
 
 const RouterManager = () => {
   const { user, loading } = useContext(UserContext);
@@ -44,12 +45,48 @@ const RouterManager = () => {
       />
       <Route
         path="/crear-producto"
-        element={user ? <CrearProducto /> : <Navigate to="/login" replace />}
+        element={
+          user && user.rol_administrador ? (
+            <CrearProducto />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+
+      <Route
+        path="/editar-producto/:id"
+        element={
+          user && user.rol_administrador ? (
+            <EditarProducto />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
       />
       <Route
         path="/pedidos"
         element={user ? <MisPedidos /> : <Navigate to="/login" replace />}
       />
+
+      {/* Rutas públicas */}
+      <Route path="/galeria" element={<GaleriaProductos />} />
+      <Route
+        path="/galeria/electrodomesticos"
+        element={<GaleriaProductos categoriaInicial={1} />}
+      />
+      <Route
+        path="/galeria/cocina"
+        element={<GaleriaProductos categoriaInicial={2} />}
+      />
+      <Route
+        path="/galeria/muebles"
+        element={<GaleriaProductos categoriaInicial={3} />}
+      />
+
+      <Route path="/producto/:id" element={<CardProduct />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout-success" element={<CheckoutSuccess />} />
 
       {/* Ruta por defecto */}
       <Route path="*" element={<NotFound />} />
