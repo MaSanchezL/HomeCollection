@@ -11,55 +11,51 @@ const PORT = process.env.PORT || 3000;
 
 // 🔹 Conexión a PostgreSQL con SSL para Render
 const pool = new Pool({
-  user: process.env.DB_USER || "dbhc_user",
-  host: process.env.DB_HOST || "dpg-d3i5cfc9c44c73agd4bg-a.oregon-postgres.render.com",
-  database: process.env.DB_NAME || "dbhc",
-  password: process.env.DB_PASSWORD || "POvhOOHCm8zB36ZKGFE2ifTmrZNYCirK",
+  user: "dbhc_user",
+  host: "dpg-d3i5cfc9c44c73agd4bg-a.oregon-postgres.render.com",
+  database: "dbhc",
+  password: "POvhOOHCm8zB36ZKGFE2ifTmrZNYCirK",
   port: 5432,
-  ssl: { rejectUnauthorized: false }, // necesario en Render
+  ssl: { rejectUnauthorized: false },
 });
 
-// Test de conexión a la DB
 pool.query("SELECT NOW()")
   .then(res => console.log("✅ DB conectada:", res.rows[0]))
   .catch(err => console.error("❌ Error DB:", err));
 
-// 🔹 CORS robusto
+// 🔹 Middleware CORS para producción
 const allowedOrigins = [
   "https://homecollection.onrender.com",
-  "http://localhost:5173", // para desarrollo local
+  "http://localhost:5173" // opcional para desarrollo
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // Permite peticiones desde herramientas o SSR sin origin
-    if (!origin) return callback(null, true);
-
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // Postman o SSR
     const normalized = origin.replace(/\/$/, "");
     const allowed = allowedOrigins.some(o => o.replace(/\/$/, "") === normalized);
-
     if (allowed) return callback(null, true);
-
     console.warn("🚫 Bloqueado por CORS:", origin);
     return callback(new Error("No permitido por CORS"));
   },
-  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 }));
 
-// Preflight automático
-app.options("*", cors());
-
-// Middleware JSON
-app.use(express.json());
-
-// 🔹 Endpoint raíz /api para test de salud
-app.get("/api", (req, res) => {
-  res.json({ success: true, message: "API funcionando" });
+// 🔹 Preflight para todas las rutas
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.sendStatus(200);
 });
 
-// 🔹 Endpoints reales
+// 🔹 Middleware JSON
+app.use(express.json());
+
+// 🔹 Rutas de ejemplo (reemplaza por tus routers)
 import authRouter from "./routes/auth.route.js";
 import productRoute from "./routes/product.route.js";
 import ordersRouter from "./routes/orders.route.js";
@@ -68,31 +64,32 @@ app.use("/api/auth", authRouter);
 app.use("/api/products", productRoute);
 app.use("/api/orders", ordersRouter);
 
-// Ruta de salud adicional (opcional)
-app.get("/api/health", async (req, res) => {
+// Ruta de prueba DB
+app.get("/api/test-db", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
     res.json({ success: true, time: result.rows[0] });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ success: false, message: "Error DB" });
   }
 });
 
-// Manejo de 404 para APIs
+// 🔹 Servir frontend React
+const frontendDist = path.join(process.cwd(), "../frontend/dist");
+app.use(express.static(frontendDist, { extensions: ["html"] }));
+
+// Todas las rutas que no sean /api/* servirán index.html
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(frontendDist, "index.html"));
+});
+
+// 🔹 Manejo 404 API
 app.use("/api/*", (req, res) => {
   res.status(404).json({
     success: false,
     message: `Ruta no encontrada: ${req.method} ${req.originalUrl}`,
   });
-});
-
-// 🔹 Servir frontend
-const frontendDist = path.join(process.cwd(), "../frontend/dist");
-app.use(express.static(frontendDist, { extensions: ["html"] }));
-
-// Todas las rutas que no sean /api/* sirven index.html
-app.get(/^\/(?!api).*/, (req, res) => {
-  res.sendFile(path.join(frontendDist, "index.html"));
 });
 
 // 🔹 Servidor
