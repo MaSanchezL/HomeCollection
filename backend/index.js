@@ -13,22 +13,23 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const allowedOrigins = [process.env.FRONTEND_URL];
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      const allowedOrigins = [process.env.FRONTEND_URL];
       if (!origin) return callback(null, true);
-
-      const normalizedOrigin = origin.replace(/\/$/, "");
-      const isAllowed = allowedOrigins.some(o => o.replace(/\/$/, "") === normalizedOrigin);
-
-      if (isAllowed) return callback(null, true);
+      const normalized = origin.replace(/\/$/, "");
+      const allowed = allowedOrigins.some(o => o.replace(/\/$/, "") === normalized);
+      if (allowed) return callback(null, true);
       return callback(new Error("No permitido por CORS"));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
+
+app.options("*", cors());
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRoute);
