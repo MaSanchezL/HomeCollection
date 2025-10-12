@@ -12,15 +12,15 @@ const PORT = process.env.PORT || 3000;
 
 // ✅ Lista explícita de orígenes permitidos
 const allowedOrigins = [
-  "https://homecollection.onrender.com",         // 🌍 Frontend desplegado en Render
-  "http://localhost:5173",                       // 💻 Desarrollo local (Vite)
+  "https://homecollection.onrender.com", // Frontend desplegado en Render
+  "http://localhost:5173",               // Desarrollo local (Vite)
 ];
 
-// ✅ Middleware CORS fijo y robusto
+// ✅ Middleware CORS principal
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // Permitir sin origen (Postman)
+      if (!origin) return callback(null, true); // Permitir sin origin (Postman, SSR)
       const normalized = origin.replace(/\/$/, "");
       const allowed = allowedOrigins.some(o => o.replace(/\/$/, "") === normalized);
       if (allowed) return callback(null, true);
@@ -33,8 +33,13 @@ app.use(
   })
 );
 
-// 🔧 Manejo global de preflight (OPTIONS)
-app.options("*", cors());
+// 🔧 Manejo manual de preflight (OPTIONS)
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", allowedOrigins.join(","));
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.sendStatus(200);
+});
 
 // Middleware JSON
 app.use(express.json());
