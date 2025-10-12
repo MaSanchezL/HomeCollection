@@ -15,6 +15,9 @@ const pool = new Pool({
   database: "dbhc",
   password: "POvhOOHCm8zB36ZKGFE2ifTmrZNYCirK",
   port: 5432,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 pool.query("SELECT NOW()")
