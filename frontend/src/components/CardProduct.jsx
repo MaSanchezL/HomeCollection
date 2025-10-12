@@ -9,6 +9,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import "../assets/css/CardProduct.css";
 import { Link, useParams } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
+import { UserContext } from "../context/UserContext";
 
 const CardProduct = () => {
   const { id } = useParams();
@@ -18,12 +19,61 @@ const CardProduct = () => {
   const [like, setLike] = useState(false);
   const { agregarProductos } = useContext(CartContext);
 
+  const { user } = useContext(UserContext);
+
   const getProducyById = async () => {
     try {
-    const res = await fetch(`${API_URL}/products/${id}`);
+      let fetchOptions = {};
+      
+      if (user) {
+        fetchOptions = {
+          headers: { Authorization: `Bearer ${user.token}` },
+        };
+      }
+
+      const res = await fetch(`${API_URL}/products/${id}`, fetchOptions);
 
       const data = await res.json();
       setProduct(data);
+      setLike(data.isFavorite);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const isFavorite = async () => {
+    try {
+      const fetchOptions = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      };
+
+      const res = await fetch(`${API_URL}/products/like/${id}`, fetchOptions);
+
+      await res.json();
+      await getProducyById();
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const removeFavorite = async () => {
+    try {
+      const fetchOptions = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      };
+
+      const res = await fetch(`${API_URL}/products/unlike/${id}`, fetchOptions);
+
+      await res.json();
+      await getProducyById();
     } catch (error) {
       alert(error.message);
     }
@@ -34,9 +84,10 @@ const CardProduct = () => {
       getProducyById();
     }
   }, [id]); */
+
   useEffect(() => {
     getProducyById();
-  }, [id]);
+  }, [id, user]);
 
   const sumar = () => setCantidad(cantidad + 1);
 
@@ -47,6 +98,11 @@ const CardProduct = () => {
 
   const handleLikeClick = () => {
     setLike(!like);
+    if (!like) {
+      isFavorite();
+    } else {
+      removeFavorite();
+    }
   };
 
   /*   const handleAddCartClick = () => {
@@ -109,16 +165,21 @@ const CardProduct = () => {
                   Agregar al carrito
                 </Button>
 
-                <Button
-                  onClick={handleLikeClick}
-                  style={{ border: "none", backgroundColor: "transparent" }} // opcional quitar borde
-                >
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    size="2x"
-                    color={like ? "red" : "gray"} // cambia color según estado
-                  />
-                </Button>
+                {
+                  // mostrar solo si existe un usuario en el contexto
+                  user && (
+                    <Button
+                      onClick={handleLikeClick}
+                      style={{ border: "none", backgroundColor: "transparent" }} // opcional quitar borde
+                    >
+                      <FontAwesomeIcon
+                        icon={faHeart}
+                        size="2x"
+                        color={like ? "red" : "gray"} // cambia color según estado
+                      />
+                    </Button>
+                  )
+                }
 
                 <Link to={`/galeria`}> Regresar a la Galería </Link>
                 <Link to={`/cart`}> Carro</Link>

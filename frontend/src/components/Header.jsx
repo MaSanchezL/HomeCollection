@@ -15,7 +15,7 @@ function Header() {
   const { totalProducts } = useContext(CartContext);
 
   useEffect(() => {
-    console.log("Usuario en Header:", user);
+  //  console.log("Usuario en Header:", user);
   }, [user]);
 
   return (
