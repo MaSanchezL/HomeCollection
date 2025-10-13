@@ -17,7 +17,6 @@ const allowedOrigins = [process.env.FRONTEND_URL];
 app.use(
   cors({
     origin: function (origin, callback) {
-
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) return callback(null, true);
@@ -44,12 +43,14 @@ app.use("/api/*", (req, res) => {
   });
 });
 
-// const frontendDist = path.join(process.cwd(), "../frontend/dist");
-// app.use(express.static(frontendDist, { extensions: ["html"] }));
+if (process.env.ENVIRONMENT == "LOCAL") {
+  const frontendDist = path.join(process.cwd(), "../frontend/dist");
+  app.use(express.static(frontendDist, { extensions: ["html"] }));
 
-// app.get(/^\/(?!api).*/, (req, res) => {
-//   res.sendFile(path.join(frontendDist, "index.html"));
-// });
+  app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(frontendDist, "index.html"));
+  });
+}
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -59,7 +60,6 @@ app.use((err, req, res, next) => {
     message: err.message || "Error interno del servidor",
   });
 });
-
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
