@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const allowedOrigins = ["https://homecollection.onrender.com"]; //process.env.FRONTEND_URL];
+const allowedOrigins = [process.env.FRONTEND_URL];
 
 app.use(
   cors({
@@ -44,12 +44,12 @@ app.use("/api/*", (req, res) => {
   });
 });
 
-const frontendDist = path.join(process.cwd(), "../frontend/dist");
-app.use(express.static(frontendDist, { extensions: ["html"] }));
+// const frontendDist = path.join(process.cwd(), "../frontend/dist");
+// app.use(express.static(frontendDist, { extensions: ["html"] }));
 
-app.get(/^\/(?!api).*/, (req, res) => {
-  res.sendFile(path.join(frontendDist, "index.html"));
-});
+// app.get(/^\/(?!api).*/, (req, res) => {
+//   res.sendFile(path.join(frontendDist, "index.html"));
+// });
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
