@@ -15,7 +15,7 @@ const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
 
   const handleEditClick = () => {
     navigate(`/editar-producto/${id}`);
-  }
+  };
 
   return (
     <Card className="carta-galeria">

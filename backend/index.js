@@ -13,11 +13,14 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const allowedOrigins = [process.env.FRONTEND_URL];
+
 app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
+
       if (allowedOrigins.includes(origin)) return callback(null, true);
+
       return callback(new Error("No permitido por CORS"));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -40,11 +43,22 @@ app.use("/api/*", (req, res) => {
   });
 });
 
-const frontendDist = path.join(process.cwd(), "../frontend/dist");
-app.use(express.static(frontendDist, { extensions: ["html"] }));
+if (process.env.ENVIRONMENT == "LOCAL") {
+  const frontendDist = path.join(process.cwd(), "../frontend/dist");
+  app.use(express.static(frontendDist, { extensions: ["html"] }));
 
-app.get(/^\/(?!api).*/, (req, res) => {
-  res.sendFile(path.join(frontendDist, "index.html"));
+  app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(frontendDist, "index.html"));
+  });
+}
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || "Error interno del servidor",
+  });
 });
 
 app.listen(PORT, () => {
