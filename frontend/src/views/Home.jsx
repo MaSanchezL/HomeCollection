@@ -40,24 +40,24 @@ function Home() {
             <Col xs={12} md={4}>
               {renderCard(
                 "Electrodomesticos",
-                "Descripción breve del producto 1.",
-                "https://placehold.co/300x200",
+                "Todo lo que necesitas a un clic!",
+                "https://images.falabella.com/v3/assets/blt6a203fe6c6a9b6dd/blt2e8a81f5ba276a2b/66287084c1564563b781b303/cat2034.jpg?auto=webp&disable=upscale&quality=70&width=1280",
                 "/galeria/electrodomesticos"
               )}
             </Col>
             <Col xs={12} md={4}>
               {renderCard(
                 "Cocina",
-                "Descripción breve del producto 2.",
-                "https://placehold.co/300x200",
+                "Todo lo que necesitas a un clic!",
+                "https://images.falabella.com/v3/assets/blt6a203fe6c6a9b6dd/bltc453ac1b6e076db2/670edc9b2fb22e20e25b070a/w_1500_h_1500_fit_pad.avif",
                 "/galeria/cocina"
               )}
             </Col>
             <Col xs={12} md={4}>
               {renderCard(
                 "Muebles",
-                "Descripción breve del producto 3.",
-                "https://placehold.co/300x200",
+                "Todo lo que necesitas a un clic!",
+                "https://images.falabella.com/v3/assets/blt6a203fe6c6a9b6dd/blt0f4c56b15acf4817/662862f5cb83740116a660f3/CAT16610015.jpg?auto=webp&disable=upscale&quality=70&width=1280",
                 "/galeria/muebles"
               )}
             </Col>
