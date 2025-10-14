@@ -59,9 +59,9 @@ const GaleriaProductos = ({categoriaInicial}) => {
         onSelect={(selectedKey) =>
           setCategoria(selectedKey ? parseInt(selectedKey) : null)
         }
-        className="mb-4 justify-content-center"
+        className="nav-item"
       >
-        <Nav.Item>
+        <Nav.Item className="item">
           <Nav.Link eventKey="0">Todos</Nav.Link>
         </Nav.Item>
         <Nav.Item>

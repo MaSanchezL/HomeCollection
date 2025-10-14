@@ -5,7 +5,7 @@ import CardBody from "react-bootstrap/esm/CardBody";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { faFilePen } from "@fortawesome/free-solid-svg-icons";
+import { faFilePen, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
@@ -26,26 +26,30 @@ const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
           Precio: {parseFloat(precio).toFixed(0)}{" "}
         </Card.Text>
       </Card.Body>
-      <Card.Body>
+      <Card.Body className="boton">
         <Link to={`/producto/${id}`}>
           <Button
             variant="primary"
             size="lg"
-            style={{ width: "200px", margin: "0 auto" }}
+            style={{ width: "150px", margin: "0 auto" }}
           >
             Ver más
           </Button>
         </Link>
       </Card.Body>
-      <Card.Footer>
+      <Card.Body className="d-flex justify-content-end">
         {user && user.rol_administrador && (
-          <Button onClick={handleEditClick}>
-            <FontAwesomeIcon icon={faFilePen} size="2x" color="blue" />
+          <Button className="icono"
+            onClick={handleEditClick}
+            style={{ border: "none", backgroundColor: "transparent" }}
+          >            
+            <FontAwesomeIcon icon={faPenToSquare} size="2x" color="blue" />
           </Button>
         )}
-      </Card.Footer>
+      </Card.Body>
     </Card>
   );
 };
+
 
 export default CardProductGaleria;
