@@ -5,8 +5,12 @@ import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import { useContext } from "react";
 
 const MisPedidos = () => {
+  const { user } = useContext(UserContext);
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,8 +24,12 @@ const MisPedidos = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/me`, {
-          credentials: "include", // si usas cookies
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/orders/me`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
         });
 
         if (!res.ok) throw new Error("Error al obtener pedidos");

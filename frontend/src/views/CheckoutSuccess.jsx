@@ -1,15 +1,21 @@
 import React, { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Navigate, Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
+import { UserContext } from "../context/UserContext";
 
 const CheckoutSuccess = () => {
   const { cart, totalPrice, totalProducts, clearCart } =
     useContext(CartContext);
+  const { user, logout } = useContext(UserContext);
 
+  const handleLogout = () => {
+    logout();
+    clearCart();
+  };
   return (
     <Container className="my-5 d-flex justify-content-center">
       <Card style={{ maxWidth: "600px", width: "100%" }} className="shadow-lg">
@@ -26,7 +32,7 @@ const CheckoutSuccess = () => {
             Muchas Gracias!
           </h3>
           <p className="lead">
-            Tu número de pedido es:
+            Tu número de boleta es:
             <strong>#{Math.floor(Math.random() * 900000) + 100000}</strong>
           </p>
 
@@ -47,16 +53,21 @@ const CheckoutSuccess = () => {
           </ListGroup>
 
           <div className="mt-5 d-grid gap-3">
-            <Button as={Link} to="/galeria" variant="primary" size="lg">
-              Seguir Comprando
+            <Button
+              as={Link}
+              to="/galeria"
+              className="pedidos-button"
+              size="lg"
+            >
+              Continuar Comprando
             </Button>
             <Button
               as={Link}
               to="/"
-              variant="outline-secondary"
-              onClick={clearCart}
+              className="logout-button"
+              onClick={handleLogout}
             >
-              Volver al Inicio
+              Cerrar Sesión
             </Button>
           </div>
         </Card.Body>

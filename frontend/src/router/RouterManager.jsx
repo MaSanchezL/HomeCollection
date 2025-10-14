@@ -68,7 +68,10 @@ const RouterManager = () => {
         path="/pedidos"
         element={user ? <MisPedidos /> : <Navigate to="/login" replace />}
       />
-
+      <Route
+        path="/orders:id"
+        element={user ? <MisPedidos /> : <Navigate to="/login" replace />}
+      />
       {/* Rutas públicas */}
       <Route path="/galeria" element={<GaleriaProductos />} />
       <Route
