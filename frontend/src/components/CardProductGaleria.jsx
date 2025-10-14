@@ -14,7 +14,7 @@ const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
   const navigate = useNavigate();
 
   const handleEditClick = () => {
-    navigate(`/editar-producto/:id`);
+    navigate(`/editar-producto/${id}`);
   };
 
   return (
