@@ -4,7 +4,6 @@ import {
 } from "../models/orders.model.js";
 import { findUserByEmail } from "../models/auth.model.js";
 
-// 🔹 Obtener órdenes del usuario logueado
 export const getMyOrders = async (req, res) => {
   try {
     const emailUser = req.user;
@@ -22,7 +21,6 @@ export const getMyOrders = async (req, res) => {
   }
 };
 
-// 🔹 Crear orden del usuario logueado
 export const createOrder = async (req, res) => {
   try {
     const emailUser = req.user;

@@ -104,8 +104,7 @@ const DetalleMisPedidos = () => {
           {orders.map((order) => (
             <tr key={order.order_id}>
               <td>#{order.id.toString().slice(0, 8)}</td>
-              {/*               <td>{new Date(order.created_at).toLocaleDateString()}</td>
-               */}
+              {}
               <td>{order.products.nombre}</td>
               <td className="fw-bold">${Number(order.quantity).toFixed(2)}</td>
               <td className="fw-bold">${Number(order.precio).toFixed(2)}</td>
