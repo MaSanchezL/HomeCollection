@@ -1,4 +1,7 @@
-import { getOrdersByUserId, createOrderForUser } from "../models/orders.model.js";
+import {
+  getOrdersByUserId,
+  createOrderForUser,
+} from "../models/orders.model.js";
 import { findUserByEmail } from "../models/auth.model.js";
 
 // 🔹 Obtener órdenes del usuario logueado
@@ -32,7 +35,9 @@ export const createOrder = async (req, res) => {
     const { items, total_amount } = req.body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ message: "No hay productos para crear la orden" });
+      return res
+        .status(400)
+        .json({ message: "No hay productos para crear la orden" });
     }
 
     if (!total_amount || total_amount <= 0) {
@@ -44,5 +49,20 @@ export const createOrder = async (req, res) => {
   } catch (error) {
     console.error("Error en createOrder:", error);
     res.status(500).json({ message: error.message });
+  }
+};
+export const getItemsByOrderId = async (userId) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT o.id, o.created_at, o.total_amount
+       FROM orders o
+       WHERE o.user_id = $1
+       ORDER BY o.created_at DESC`,
+      [userId]
+    );
+    return rows;
+  } catch (error) {
+    console.error("Error en getOrdersByUserId:", error);
+    throw new Error("No se pudieron obtener los pedidos");
   }
 };
