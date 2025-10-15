@@ -1,21 +1,26 @@
 import pool from "../db.js";
 
-// 🔹 Obtener órdenes de un usuario
 export const getOrdersByUserId = async (userId) => {
-  const { rows } = await pool.query(
-    `SELECT o.id, o.created_at, o.total_amount
-     FROM orders o
-     WHERE o.user_id = $1
-     ORDER BY o.created_at DESC`,
-    [userId]
-  );
-  return rows;
+  try {
+    const { rows } = await pool.query(
+      `SELECT o.id, o.created_at, o.total_amount
+       FROM orders o
+       WHERE o.user_id = $1
+       ORDER BY o.created_at DESC`,
+      [userId]
+    );
+    return rows;
+  } catch (error) {
+    console.error("Error en getOrdersByUserId:", error);
+    throw new Error("No se pudieron obtener los pedidos");
+  }
 };
 
-// 🔹 Crear una nueva orden
 export const createOrderForUser = async (userId, items, total) => {
   try {
-    /*  await client.query("BEGIN"); */
+    console.log("Creando orden para userId:", userId);
+    console.log("Total:", total);
+    console.log("Items:", items);
 
     const orderResult = await pool.query(
       `INSERT INTO orders (user_id, total_amount)
@@ -33,9 +38,10 @@ export const createOrderForUser = async (userId, items, total) => {
         [order.id, item.product_id, item.quantity, item.price]
       );
     }
+
     return order;
   } catch (error) {
-    console.error("Error en la Orden:", error.message);
-    throw new Error("No se pudieron obtener los pedidos");
+    console.error("Error en createOrderForUser:", error);
+    throw new Error("Error al crear la orden");
   }
 };
