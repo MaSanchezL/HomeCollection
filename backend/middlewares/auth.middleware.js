@@ -12,7 +12,6 @@ export const extractTokenMiddleware = async (req, res, next) => {
     }
 
     next();
-  
   } catch (error) {
     return res
       .status(400)
@@ -31,7 +30,7 @@ const authMiddleware = async (req, res, next) => {
     const decoded = jwt.verify(extractToken, process.env.JWT_SECRET);
 
     req.user = decoded.email;
-    
+
     next();
   } catch (error) {
     return res
@@ -39,9 +38,6 @@ const authMiddleware = async (req, res, next) => {
       .json({ message: "el token es invalido", desc: error.message });
   }
 };
-
-
-
 
 export const isAdminMiddleware = async (req, res, next) => {
   try {
@@ -55,7 +51,7 @@ export const isAdminMiddleware = async (req, res, next) => {
 
     req.user = decoded.email;
     const user = await findUserByEmail(decoded.email);
-    if(!user.rol_administrador){
+    if (!user.rol_administrador) {
       return res.status(403).json({ message: "Debe ser administrador" });
     }
 
