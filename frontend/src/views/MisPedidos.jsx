@@ -99,9 +99,11 @@ const MisPedidos = () => {
         <tbody>
           {orders.map((order) => (
             <tr key={order.id}>
-              <td>#{order.id.slice(0, 8)}...</td>
+              <td>#{order.id.toString().slice(0, 8)}</td>
               <td>{new Date(order.created_at).toLocaleDateString()}</td>
-              <td className="fw-bold">${order.total_amount.toFixed(2)}</td>
+              <td className="fw-bold">
+                ${Number(order.total_amount).toFixed(2)}
+              </td>
               <td>
                 <Button
                   variant="outline-info"
