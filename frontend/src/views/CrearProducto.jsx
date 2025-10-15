@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 const CrearProducto = () => {
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
   const navigate = useNavigate();
 
@@ -41,7 +42,7 @@ const CrearProducto = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/api/products/create", {
+      const res = await fetch("${API_URL}/products/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

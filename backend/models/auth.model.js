@@ -1,6 +1,7 @@
 import pool from "../db.js";
 
-// Registrar nuevo usuario (verificar con campos de la tabla usuarios de la DB)
+// Registrar Usuario
+
 const newUserModel = async (
   nombre,
   apellido,
@@ -27,25 +28,3 @@ const findUserByEmail = async (email) => {
 };
 
 export { newUserModel, findUserByEmail };
-
-//Antes de empezar tenìa esto, es lo mismo de las pizzas
-
-/*import { readFile, writeFile } from "node:fs/promises";
-
-const getUserByEmail = async (email) => {
-  const data = await readFile("db/users.json", "utf-8");
-  const users = JSON.parse(data);
-  return users.find((user) => user.email === email);
-};
-
-const addUser = async (newUser) => {
-  const data = await readFile("db/users.json", "utf-8");
-  const users = JSON.parse(data);
-  users.push(newUser);
-  await writeFile("db/users.json", JSON.stringify(users, null, 2));
-};
-
-export const authModel = {
-  getUserByEmail,
-  addUser,
-};*/
