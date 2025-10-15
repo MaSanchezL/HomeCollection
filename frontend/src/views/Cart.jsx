@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
-import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
-import { Table, Row, Col } from "react-bootstrap";
-import "../assets/css/CardProductGaleria.css";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import Container from "react-bootstrap/Container";
+import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
+import { Row, Col } from "react-bootstrap";
+import { useNavigate, Link } from "react-router-dom";
+import "../assets/css/CardProductGaleria.css";
 
 const Cart = () => {
   const {
@@ -18,22 +18,21 @@ const Cart = () => {
     quitarProductos,
     checkout,
   } = useContext(CartContext);
+
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
+
   const handleCheckout = async () => {
-    try {
-      const result = await checkout();
-      console.log(result);
-      if (result.success) {
-        navigate("/checkout-success");
-      }
-    } catch (error) {
-      console.log(error);
+    const result = await checkout();
+    if (result.success) {
+      navigate("/checkout-success");
+    } else {
+      alert(result.message);
     }
   };
-  const handleContinuarCompra = () => {
-    navigate("/galeria");
-  };
+
+  const handleContinuarCompra = () => navigate("/galeria");
+
   return (
     <Container className="my-5">
       <div className="carro">
@@ -62,11 +61,7 @@ const Cart = () => {
                         <img
                           src={item.image_url}
                           alt={item.nombre}
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            objectFit: "cover",
-                          }}
+                          style={{ width: 50, height: 50, objectFit: "cover" }}
                         />
                       </td>
                       <td>{item.nombre}</td>
@@ -76,16 +71,16 @@ const Cart = () => {
                           variant="outline-secondary"
                           size="sm"
                           onClick={() => quitarProducto(item)}
-                          style={{ marginRight: "5px" }}
+                          className="me-2"
                         >
                           -
                         </Button>
-                        <span className="mx-2">{item.count}</span>
+                        {item.count}
                         <Button
                           variant="outline-secondary"
                           size="sm"
                           onClick={() => agregarProducto(item)}
-                          style={{ marginLeft: "5px" }}
+                          className="ms-2"
                         >
                           +
                         </Button>
@@ -93,8 +88,7 @@ const Cart = () => {
                       <td>${(item.precio * item.count).toFixed(0)}</td>
                       <td>
                         <Button
-                          /*                         variant="danger"
-                           */ size="sm"
+                          size="sm"
                           onClick={() => quitarProductos(item, item.count)}
                         >
                           ❌
@@ -104,45 +98,38 @@ const Cart = () => {
                   ))}
                 </tbody>
               </Table>
-              <div className="text-end mt-4 login">
+
+              <div className="text-end mt-4">
                 <h4>
-                  Cantidad de Productos:{" "}
-                  <span className="fw-bold">{totalProducts}</span>
+                  Cantidad de Productos: <span className="fw-bold">{totalProducts}</span>
                 </h4>
                 <h2>
-                  Valor Total:{" "}
-                  <span className="fw-bold">${totalPrice.toFixed(0)}</span>
+                  Valor Total: <span className="fw-bold">${totalPrice.toFixed(0)}</span>
                 </h2>
               </div>
-              <div className="d-grid gap-2 mt-4">
-                <Row className="mt-4 align-items-center">
-                  <Col xs={4}>
-                    <Button
-                      type="button"
-                      className="pedidos-button"
-                      onClick={handleContinuarCompra}
-                    >
-                      Continuar Comprando
-                    </Button>
-                  </Col>
 
-                  <Col xs={4}>
-                    <Button
-                      type="button"
-                      className="logout-button"
-                      onClick={handleCheckout}
-                    >
-                      Finalizar Compra
-                    </Button>
-                  </Col>
-                </Row>
-              </div>
+              <Row className="mt-4 align-items-center">
+                <Col xs={4}>
+                  <Button
+                    type="button"
+                    className="pedidos-button"
+                    onClick={handleContinuarCompra}
+                  >
+                    Continuar Comprando
+                  </Button>
+                </Col>
+
+                <Col xs={4}>
+                  <Button
+                    type="button"
+                    className="logout-button"
+                    onClick={handleCheckout}
+                  >
+                    Finalizar Compra
+                  </Button>
+                </Col>
+              </Row>
             </div>
-            {/*  <div className="d-grid gap-2 mt-4">
-              <Button variant="primary" size="lg" className="buttonPagar" a>
-                Finalizar Compra
-              </Button>
-            </div> */}
           </>
         )}
       </div>
