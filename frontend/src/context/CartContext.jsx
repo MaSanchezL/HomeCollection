@@ -84,47 +84,48 @@ const CartProvider = ({ children }) => {
     setCart([]);
   };
 
-  const checkout = async () => {
-    if (!user || !user.token) {
-      return {
-        success: false,
-        message: "Usuario debe estar Registrado para finalizar la compra",
-      };
-    }
-    const orderData = {
-      total_amount: totalPrice,
-      items: cart.map((item) => ({
-        product_id: item.id,
-        quantity: item.count,
-        price: item.precio,
-      })),
+const checkout = async () => {
+  if (!user || !user.token) {
+    return {
+      success: false,
+      message: "Usuario debe estar registrado para finalizar la compra",
     };
-    try {
-      const res = await fetch(`${API_URL}/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify(orderData),
-      });
-      const data = await res.json();
-      console.log(data);
-      /*    if (!res.ok) {
-        // Manejar errores del servidor (e.g., 400, 500)
-        throw new Error(data.error || "Error en el Pedido");
-      }
+  }
 
-      // Limpiar el carrito solo si el pedido fue exitoso
-      clearCart();
-
-      // Retornar éxito y los detalles del pedido creado (data)
-      return { success: true, order: data }; */
-    } catch (error) {
-      console.error("Error al finalizar la compra:", error);
-      return { success: false, message: error.message || "error de conexión" };
-    }
+  const orderData = {
+    total_amount: totalPrice,
+    items: cart.map((item) => ({
+      product_id: item.id,
+      quantity: item.count,
+      price: item.precio,
+    })),
   };
+
+  try {
+    const res = await fetch(`${API_URL}/orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Error al crear la orden");
+    }
+
+    clearCart();
+
+    return { success: true, order: data };
+  } catch (error) {
+    console.error("Error al finalizar la compra:", error);
+    return { success: false, message: error.message || "Error de conexión" };
+  }
+};
+
   return (
     <CartContext.Provider
       value={{
