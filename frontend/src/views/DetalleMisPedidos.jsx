@@ -7,12 +7,13 @@ import Button from "react-bootstrap/Button";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { useContext } from "react";
+import { Row, Col } from "react-bootstrap";
 
 const DetalleMisPedidos = () => {
   const { user } = useContext(UserContext);
-  const { id } = useParams();
+  const { id } = useParams(); // id en el orders.model es orderId
 
-  const [orders, setOrders] = useState([]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -23,7 +24,12 @@ const DetalleMisPedidos = () => {
   };
 
   useEffect(() => {
-    const fetchOrdersById = async () => {
+    const fetchDetailById = async () => {
+      if (!user || !user.token) {
+        setError("Usuario no autenticado. Por favor, inicie sesión.");
+        setLoading(false);
+        return;
+      }
       try {
         const res = await fetch(
           `${import.meta.env.VITE_API_URL}/orders/${id}`,
@@ -36,19 +42,26 @@ const DetalleMisPedidos = () => {
           }
         );
 
-        if (!res.ok) throw new Error("Error al obtener pedidos");
-
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(
+            `Error ${res.status}: ${
+              errorText || "No se pudo cargar el detalle."
+            }`
+          );
+        }
         const data = await res.json();
-        setOrders(data);
+        setItems(data);
       } catch (err) {
+        console.error("Error fetching order details:", err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchOrdersById();
-  }, []);
+    fetchDetailById();
+  }, [id, user]);
 
   if (loading) {
     return (
@@ -65,68 +78,78 @@ const DetalleMisPedidos = () => {
         <Alert variant="danger">
           <Alert.Heading>Error al cargar Detalle</Alert.Heading>
           <p>{error}</p>
-          <Button onClick={() => window.location.reload()} variant="danger">
-            Reintentar
+          {/* Se usa navigate para un mejor manejo que window.location.reload() */}
+          <Button onClick={handlePedidos} variant="danger">
+            Volver a Pedidos
           </Button>
         </Alert>
       </Container>
     );
   }
-
-  if (orders.length === 0) {
+  if (items.length === 0) {
     return (
       <Container className="my-5 text-center">
-        <h2>Historial de Pedidos</h2>
+        <h2>Detalle del Pedido #{id}</h2>
         <Alert variant="info" className="mt-4">
-          Aún no has realizado ningún pedido.
+          No se encontraron ítems para este pedido.
         </Alert>
-        <Button as={Link} to="/galeria" variant="primary" className="mt-3">
-          Empezar a Comprar
+        <Button onClick={handlePedidos} variant="primary" className="mt-3">
+          Volver a Mis Pedidos
         </Button>
       </Container>
     );
   }
-
   return (
     <Container className="my-5">
-      <h1 className="mb-4 text-center">Mi Historial de Pedidos</h1>
-
-      <Table striped bordered hover responsive>
-        <thead>
-          <tr>
-            <th>ID Producto</th>
-            <th>Nombre Producto</th>
-            <th>Cantidad</th>
-            <th>Precio</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.order_id}>
-              <td>#{order.id.toString().slice(0, 8)}</td>
-              {/*               <td>{new Date(order.created_at).toLocaleDateString()}</td>
-               */}
-              <td>{order.products.nombre}</td>
-              <td className="fw-bold">${Number(order.quantity).toFixed(2)}</td>
-              <td className="fw-bold">${Number(order.precio).toFixed(2)}</td>
-              <td>
-                <Button
-                  variant="outline-info"
-                  size="sm"
-                  as={Link}
-                  to={`/orders/${id}`}
-                >
-                  Ver Detalle
-                </Button>
-              </td>
+      <h1 className="mb-4 text-center">Detalle del Pedido #{id}</h1>
+      <div className="login-card">
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Nombre Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Subtotal</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <tr key={item.id}>
+                <td>
+                  <img
+                    src={item.image_url}
+                    alt={item.product_name}
+                    style={{ width: 50, height: 50, objectFit: "cover" }}
+                  />
+                </td>{" "}
+                <td>{item.product_name}</td>
+                <td>{item.quantity}</td>
+                {/* Se asume que item.price es el precio unitario */}
+                <td>${Number(item.price).toFixed(0)}</td>
+                <td className="fw-bold">
+                  ${(Number(item.quantity) * Number(item.price)).toFixed(0)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
 
-      <Button type="button" className="pedidos-button" onClick={handlePedidos}>
-        Volver
-      </Button>
+        {/* ⚠️ Se corrige el mapeo de datos y se elimina el botón de 'Ver Detalle' redundante */}
+
+        <div className="d-flex justify-content-end mt-4">
+          {/* Aquí podrías agregar un Total General si fuera necesario */}
+        </div>
+        <Col xs={4}>
+          <Button
+            type="button"
+            className="pedidos-button"
+            onClick={handlePedidos}
+          >
+            Volver a Mis Pedidos
+          </Button>
+        </Col>
+      </div>
     </Container>
   );
 };

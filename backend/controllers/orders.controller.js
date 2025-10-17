@@ -1,4 +1,5 @@
 import {
+  getItemsByOrderId,
   getOrdersByUserId,
   createOrderForUser,
 } from "../models/orders.model.js";
@@ -19,6 +20,25 @@ export const getMyOrders = async (req, res) => {
   } catch (error) {
     console.error("Error en getMyOrders:", error);
     res.status(500).json({ message: "Error al obtener pedidos" });
+  }
+};
+
+export const getMyOrderDetail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const orderId = parseInt(id, 10);
+    const items = await getItemsByOrderId(orderId);
+    /*  if (!orderId) {
+      return res.status(403).json({ message: "No existe la Orden" });
+    } */
+    res.status(200).json(items);
+  } catch (error) {
+    console.error("Error en getMyOrders:", error);
+    res
+      .status(500)
+      .json({
+        message: "Error al obtener el Detalle de la Orden -getMyOrderDetail-",
+      });
   }
 };
 
@@ -49,20 +69,5 @@ export const createOrder = async (req, res) => {
   } catch (error) {
     console.error("Error en createOrder:", error);
     res.status(500).json({ message: error.message });
-  }
-};
-export const getItemsByOrderId = async (userId) => {
-  try {
-    const { rows } = await pool.query(
-      `SELECT o.id, o.created_at, o.total_amount
-       FROM orders o
-       WHERE o.user_id = $1
-       ORDER BY o.created_at DESC`,
-      [userId]
-    );
-    return rows;
-  } catch (error) {
-    console.error("Error en getOrdersByUserId:", error);
-    throw new Error("No se pudieron obtener los pedidos");
   }
 };

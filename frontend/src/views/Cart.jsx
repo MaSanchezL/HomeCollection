@@ -39,7 +39,23 @@ const Cart = () => {
         <h3 className="mb-4">Detalles del Pedido:</h3>
 
         {cart.length === 0 ? (
-          <p>El Carrito está vacío. ¡Agrega nuestros productos!</p>
+          <>
+            <Row className="mt-4 align-items-center">
+              <div className="login-card">
+                <p>El Carrito está vacío. ¡Agrega nuestros productos!</p>
+                <Col xs={4}>
+                  <Button
+                    as={Link}
+                    to="/galeria"
+                    type="button"
+                    className="pedidos-button"
+                  >
+                    Empezar a Comprar
+                  </Button>
+                </Col>
+              </div>
+            </Row>
+          </>
         ) : (
           <>
             <div className="login-card">
@@ -101,10 +117,12 @@ const Cart = () => {
 
               <div className="text-end mt-4">
                 <h4>
-                  Cantidad de Productos: <span className="fw-bold">{totalProducts}</span>
+                  Cantidad de Productos:{" "}
+                  <span className="fw-bold">{totalProducts}</span>
                 </h4>
                 <h2>
-                  Valor Total: <span className="fw-bold">${totalPrice.toFixed(0)}</span>
+                  Valor Total:{" "}
+                  <span className="fw-bold">${totalPrice.toFixed(0)}</span>
                 </h2>
               </div>
 

@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { useContext } from "react";
+import { Row, Col } from "react-bootstrap";
 
 const MisPedidos = () => {
   const { user } = useContext(UserContext);
@@ -73,12 +74,21 @@ const MisPedidos = () => {
     return (
       <Container className="my-5 text-center">
         <h2>Historial de Pedidos</h2>
-        <Alert variant="info" className="mt-4">
-          Aún no has realizado ningún pedido.
-        </Alert>
-        <Button as={Link} to="/galeria" variant="primary" className="mt-3">
-          Empezar a Comprar
-        </Button>
+        <div className="login-card">
+          <Alert variant="info" className="mt-4">
+            Aún no has realizado ningún pedido.
+          </Alert>
+          <Col xs={4}>
+            <Button
+              as={Link}
+              to="/galeria"
+              type="button"
+              className="pedidos-button"
+            >
+              Empezar a Comprar
+            </Button>
+          </Col>
+        </div>
       </Container>
     );
   }
@@ -86,42 +96,48 @@ const MisPedidos = () => {
   return (
     <Container className="my-5">
       <h1 className="mb-4 text-center">Mi Historial de Pedidos</h1>
-
-      <Table striped bordered hover responsive>
-        <thead>
-          <tr>
-            <th>ID Pedido</th>
-            <th>Fecha</th>
-            <th>Monto Total</th>
-            <th>Detalle</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td>#{order.id.toString().slice(0, 8)}</td>
-              <td>{new Date(order.created_at).toLocaleDateString()}</td>
-              <td className="fw-bold">
-                ${Number(order.total_amount).toFixed(2)}
-              </td>
-              <td>
-                <Button
-                  variant="outline-info"
-                  size="sm"
-                  as={Link}
-                  to={`/orders/${order.id}`}
-                >
-                  Ver Detalle
-                </Button>
-              </td>
+      <div className="login-card">
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th>ID Pedido</th>
+              <th>Fecha</th>
+              <th>Monto Total</th>
+              <th>Detalle</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-
-      <Button type="button" className="pedidos-button" onClick={handlePerfil}>
-        Volver
-      </Button>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.id}>
+                <td>#{order.id.toString().slice(0, 8)}</td>
+                <td>{new Date(order.created_at).toLocaleDateString()}</td>
+                <td className="fw-bold">
+                  ${Number(order.total_amount).toFixed(0)}
+                </td>
+                <td>
+                  <Button
+                    variant="outline-info"
+                    size="sm"
+                    as={Link}
+                    to={`/orders/${order.id}`}
+                  >
+                    Ver Detalle
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>{" "}
+        <Col xs={4}>
+          <Button
+            type="button"
+            className="pedidos-button"
+            onClick={handlePerfil}
+          >
+            Volver
+          </Button>
+        </Col>
+      </div>
     </Container>
   );
 };

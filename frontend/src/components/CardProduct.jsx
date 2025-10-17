@@ -24,7 +24,7 @@ const CardProduct = () => {
   const getProducyById = async () => {
     try {
       let fetchOptions = {};
-      
+
       if (user) {
         fetchOptions = {
           headers: { Authorization: `Bearer ${user.token}` },
@@ -92,7 +92,7 @@ const CardProduct = () => {
   const sumar = () => setCantidad(cantidad + 1);
 
   const restar = () => {
-    if (cantidad > 0) return "No puedes restar más productos";
+    if (cantidad > 0 /* return "No puedes restar más productos" */);
     setCantidad(cantidad - 1);
   };
 
