@@ -13,7 +13,7 @@ import {
   updateProduct,
 } from "../models/product.model.js";
 
-// GET. Obtener productos por el id.
+// GET. Obtener productos por id.
 
 export const product_by_id = async (req, res) => {
   try {

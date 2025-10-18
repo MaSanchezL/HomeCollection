@@ -12,7 +12,7 @@ function Profile() {
   const { user, logout, loading } = useContext(UserContext);
   const navigate = useNavigate();
 
-  if (loading) return <p>Cargando usuario...</p>; // espera hasta verificar token
+  if (loading) return <p>Cargando usuario...</p>;
   if (!user) return <p>No estás logueado</p>;
 
   const handleLogout = () => {

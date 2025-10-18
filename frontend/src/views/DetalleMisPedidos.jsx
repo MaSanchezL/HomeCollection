@@ -4,12 +4,13 @@ import Table from "react-bootstrap/Table";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { useContext } from "react";
 
-const MisPedidos = () => {
+const DetalleMisPedidos = () => {
   const { user } = useContext(UserContext);
+  const { id } = useParams();
 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,20 +18,23 @@ const MisPedidos = () => {
 
   const navigate = useNavigate();
 
-  const handlePerfil = () => {
-    navigate("/profile");
+  const handlePedidos = () => {
+    navigate("/pedidos");
   };
 
   useEffect(() => {
-    const fetchOrders = async () => {
+    const fetchOrdersById = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/orders/me`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/orders/${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
 
         if (!res.ok) throw new Error("Error al obtener pedidos");
 
@@ -43,14 +47,14 @@ const MisPedidos = () => {
       }
     };
 
-    fetchOrders();
+    fetchOrdersById();
   }, []);
 
   if (loading) {
     return (
       <Container className="my-5 text-center">
         <Spinner animation="border" variant="primary" />
-        <p className="mt-2">Cargando historial de pedidos...</p>
+        <p className="mt-2">Cargando Detalle del pedido...</p>
       </Container>
     );
   }
@@ -59,7 +63,7 @@ const MisPedidos = () => {
     return (
       <Container className="my-5">
         <Alert variant="danger">
-          <Alert.Heading>Error al cargar el historial</Alert.Heading>
+          <Alert.Heading>Error al cargar Detalle</Alert.Heading>
           <p>{error}</p>
           <Button onClick={() => window.location.reload()} variant="danger">
             Reintentar
@@ -90,26 +94,26 @@ const MisPedidos = () => {
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>ID Pedido</th>
-            <th>Fecha</th>
-            <th>Monto Total</th>
-            <th>Detalle</th>
+            <th>ID Producto</th>
+            <th>Nombre Producto</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
           </tr>
         </thead>
         <tbody>
           {orders.map((order) => (
-            <tr key={order.id}>
+            <tr key={order.order_id}>
               <td>#{order.id.toString().slice(0, 8)}</td>
-              <td>{new Date(order.created_at).toLocaleDateString()}</td>
-              <td className="fw-bold">
-                ${Number(order.total_amount).toFixed(2)}
-              </td>
+              {}
+              <td>{order.products.nombre}</td>
+              <td className="fw-bold">${Number(order.quantity).toFixed(2)}</td>
+              <td className="fw-bold">${Number(order.precio).toFixed(2)}</td>
               <td>
                 <Button
                   variant="outline-info"
                   size="sm"
                   as={Link}
-                  to={`/orders/${order.id}`}
+                  to={`/orders/${id}`}
                 >
                   Ver Detalle
                 </Button>
@@ -119,11 +123,11 @@ const MisPedidos = () => {
         </tbody>
       </Table>
 
-      <Button type="button" className="pedidos-button" onClick={handlePerfil}>
+      <Button type="button" className="pedidos-button" onClick={handlePedidos}>
         Volver
       </Button>
     </Container>
   );
 };
 
-export default MisPedidos;
+export default DetalleMisPedidos;

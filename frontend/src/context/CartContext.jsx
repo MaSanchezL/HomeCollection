@@ -1,9 +1,14 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import { UserContext } from "./UserContext";
+import CheckoutSuccess from "../views/CheckoutSuccess";
 
 export const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+  const { user } = useContext(UserContext);
+
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     console.log("ver lo que cart en el contexto", cart);
@@ -79,6 +84,48 @@ const CartProvider = ({ children }) => {
     setCart([]);
   };
 
+const checkout = async () => {
+  if (!user || !user.token) {
+    return {
+      success: false,
+      message: "Usuario debe estar registrado para finalizar la compra",
+    };
+  }
+
+  const orderData = {
+    total_amount: totalPrice,
+    items: cart.map((item) => ({
+      product_id: item.id,
+      quantity: item.count,
+      price: item.precio,
+    })),
+  };
+
+  try {
+    const res = await fetch(`${API_URL}/orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Error al crear la orden");
+    }
+
+    clearCart();
+
+    return { success: true, order: data };
+  } catch (error) {
+    console.error("Error al finalizar la compra:", error);
+    return { success: false, message: error.message || "Error de conexión" };
+  }
+};
+
   return (
     <CartContext.Provider
       value={{
@@ -91,6 +138,7 @@ const CartProvider = ({ children }) => {
         totalPrice,
         totalProducts,
         clearCart,
+        checkout,
       }}
     >
       {children}

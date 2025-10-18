@@ -1,50 +1,66 @@
-import pool from "../db.js";
+import {
+  getOrdersByUserId,
+  createOrderForUser,
+} from "../models/orders.model.js";
+import { findUserByEmail } from "../models/auth.model.js";
 
-const getMyOrders = async (req, res) => {
+export const getMyOrders = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const result = await pool.query(
-      `SELECT id, total_amount AS "totalAmount", created_at AS "date"
-       FROM orders
-       WHERE user_id = $1
-       ORDER BY created_at DESC`,
-      [userId]
-    );
-    return res.json(result.rows);
-  } catch (error) {
-    return res.status(500).json({ error: "Error al obtener pedidos" });
-  }
-};
+    const emailUser = req.user;
+    const user = await findUserByEmail(emailUser);
 
-const createOrder = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const { items } = req.body;
-    if (!items || items.length === 0) {
-      return res.status(400).json({ error: "No hay productos en la orden" });
+    if (!user) {
+      return res.status(403).json({ message: "Debe estar autenticado" });
     }
 
-    const totalAmount = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-
-    const orderResult = await pool.query(
-      `INSERT INTO orders (user_id, total_amount) 
-       VALUES ($1, $2) RETURNING id, total_amount AS "totalAmount", created_at AS "date"`,
-      [userId, totalAmount]
-    );
-    const order = orderResult.rows[0];
-
-    const orderItemsValues = items.map(
-      (item) => `(${order.id}, ${item.productId}, ${item.quantity}, ${item.price})`
-    ).join(",");
-
-    await pool.query(
-      `INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ${orderItemsValues}`
-    );
-
-    return res.status(201).json(order);
+    const orders = await getOrdersByUserId(user.id);
+    res.status(200).json(orders);
   } catch (error) {
-    return res.status(500).json({ error: "Error al crear la orden" });
+    console.error("Error en getMyOrders:", error);
+    res.status(500).json({ message: "Error al obtener pedidos" });
   }
 };
 
-export default { getMyOrders, createOrder };
+export const createOrder = async (req, res) => {
+  try {
+    const emailUser = req.user;
+    const user = await findUserByEmail(emailUser);
+
+    if (!user) {
+      return res.status(403).json({ message: "Debe estar autenticado" });
+    }
+
+    const { items, total_amount } = req.body;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "No hay productos para crear la orden" });
+    }
+
+    if (!total_amount || total_amount <= 0) {
+      return res.status(400).json({ message: "Monto total inválido" });
+    }
+
+    const order = await createOrderForUser(user.id, items, total_amount);
+    res.status(201).json(order);
+  } catch (error) {
+    console.error("Error en createOrder:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+export const getItemsByOrderId = async (userId) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT o.id, o.created_at, o.total_amount
+       FROM orders o
+       WHERE o.user_id = $1
+       ORDER BY o.created_at DESC`,
+      [userId]
+    );
+    return rows;
+  } catch (error) {
+    console.error("Error en getOrdersByUserId:", error);
+    throw new Error("No se pudieron obtener los pedidos");
+  }
+};

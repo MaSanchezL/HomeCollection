@@ -33,56 +33,6 @@ export const UserProvider = ({ children }) => {
       .catch(() => logout())
       .finally(() => setLoading(false));
   }, []);
-
-  /*
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
-    fetch(`${API_URL}/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Token inválido o sesión expirada");
-        return res.json();
-      })
-      .then((data) => setUser({ ...data, token }))
-      .catch(() => logout())
-      .finally(() => setLoading(false));
-  }, []);
-  */
-
-  /*
-  const login = async (email, password) => {
-    try {
-      const res = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok)
-        return { success: false, message: data.message || "Error de login" };
-
-      localStorage.setItem("token", data.token);
-
-      setUser(data);
-
-      return { success: true };
-    } catch (err) {
-      console.error(err);
-      return { success: false, message: "Error de conexión" };
-    }
-  };
-
-
-  */
   return (
     <UserContext.Provider value={{ user, setUser, /*login,*/ logout, loading }}>
       {children}

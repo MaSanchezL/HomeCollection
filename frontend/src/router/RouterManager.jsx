@@ -14,6 +14,7 @@ import Cart from "../views/Cart.jsx";
 import CheckoutSuccess from "../views/CheckoutSuccess.jsx";
 import MisPedidos from "../views/MisPedidos.jsx";
 import EditarProducto from "../views/EditarProducto.jsx";
+import DetalleMisPedidos from "../views/DetalleMisPedidos.jsx";
 
 const RouterManager = () => {
   const { user, loading } = useContext(UserContext);
@@ -68,7 +69,12 @@ const RouterManager = () => {
         path="/pedidos"
         element={user ? <MisPedidos /> : <Navigate to="/login" replace />}
       />
-
+      <Route
+        path="/orders:id"
+        element={
+          user ? <DetalleMisPedidos /> : <Navigate to="/login" replace />
+        }
+      />
       {/* Rutas públicas */}
       <Route path="/galeria" element={<GaleriaProductos />} />
       <Route

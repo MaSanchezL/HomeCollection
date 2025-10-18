@@ -7,7 +7,6 @@ describe("POST /api/users/login and GET /user with token", () => {
   it("responds with json", async () => {
     const response = await request(app)
       .post("api/users/login")
-      // utiliza un usuario que exista en la base de datos
       .send({ email: "correo1@correo.com", password: "123456" });
 
     token = response.body.token;
@@ -17,7 +16,6 @@ describe("POST /api/users/login and GET /user with token", () => {
     expect(response.body).toHaveProperty("email");
   });
 
-  //usuario debe tener token para acceder a esta ruta
   it("responds with json", async () => {
     const response = await request(app)
       .get("/api/users")

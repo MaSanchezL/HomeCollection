@@ -43,15 +43,12 @@ const EditarProducto = () => {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user.token}`,
-        }
-    });
-     const data = await res.json();
-        alert(data.status)
+        },
+      });
+      const data = await res.json();
+      alert(data.status);
 
-        
-           navigate(`/galeria`);
-     
-      
+      navigate(`/galeria`);
     } catch (error) {
       alert(error.message);
     }
@@ -85,7 +82,7 @@ const EditarProducto = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/api/products/update", {
+      const res = await fetch("${API_URL}/products/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

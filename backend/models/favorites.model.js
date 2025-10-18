@@ -1,7 +1,7 @@
 import pool from "../db.js";
 import format from "pg-format";
 
-// POST. Crear producto (formulario)
+// POST. Crear producto
 
 export const createFavorites = async (idUser, idProduct) => {
   const query =
