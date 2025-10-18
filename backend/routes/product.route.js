@@ -8,6 +8,7 @@ import {
   product_unlike,
   product_delete,
   product_update,
+  product_random,
 } from "../controllers/product.controller.js";
 import authMiddleware, {
   extractTokenMiddleware,
@@ -21,6 +22,8 @@ productRoute.post("/create", isAdminMiddleware, product_create);
 productRoute.post("/update", isAdminMiddleware, product_update);
 
 productRoute.get("/all", product_all);
+
+productRoute.get("/random", product_random);
 
 productRoute.get("/:id", extractTokenMiddleware, product_by_id);
 
