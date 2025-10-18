@@ -8,8 +8,8 @@ import "../assets/css/Home.css";
 import { useEffect, useState } from "react";
 
 
-const renderCard = (title, text, imgSrc) => (
-  //<Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
+const renderCard = (title, text, imgSrc, url) => (
+  <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
     <Card className="text-center shadow home-card" style={{ height: "100%" }}>
       <Card.Img variant="top" src={imgSrc} />
       <Card.Body>
@@ -17,7 +17,7 @@ const renderCard = (title, text, imgSrc) => (
         <Card.Text style={{ color: "var(--secundario)" }}>{text}</Card.Text>
       </Card.Body>
     </Card>
-  //</Link>
+  </Link>
 );
 
 function Home() {
@@ -39,7 +39,6 @@ function Home() {
         HomeRandomProducts();
 
     }, [] );
-
 
 
   return (
@@ -100,18 +99,15 @@ function Home() {
 
           <Row className="g-4 mb-5 justify-content-evenly">
             {randomProducts.map((product) => (
-              <Col key={product.id} xs={12} md={3}>
-                <Link
-                  to={`/producto/${product.id}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
+              <Col key={product.id} xs={12} md={3}>              
+              
                   {renderCard(
                     product.nombre,
                     product.descripcion,
                     product.image_url,
-                    product.id
+                    `/producto/${product.id}`
                   )}
-                </Link>
+                
               </Col>
             ))}
           </Row>
