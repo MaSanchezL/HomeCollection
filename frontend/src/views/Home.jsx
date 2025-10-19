@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import "../assets/css/Home.css";
-
+import { useEffect, useState } from "react";
 
 
 const renderCard = (title, text, imgSrc, url) => (
@@ -21,6 +21,26 @@ const renderCard = (title, text, imgSrc, url) => (
 );
 
 function Home() {
+
+  const [randomProducts, setRandomProducts] = useState([]);
+
+    useEffect(() => {
+      const HomeRandomProducts= async () =>{
+        try {
+          const res = await fetch("${API_URL}/products/random");
+          const data = await res.json();
+          setRandomProducts(data);
+        } catch (error) {
+          alert(error.message);
+        }
+      }; 
+
+
+        HomeRandomProducts();
+
+    }, [] );
+
+
   return (
     <>
       <Container fluid className="p-0">
@@ -68,7 +88,9 @@ function Home() {
               <hr style={{ flex: 1, borderColor: "var(--secundario)" }} />
             </Col>
             <Col xs="auto">
-              <span className="separator-text">PRODUCTOS MAS GUSTADOS</span>
+              <span className="separator-text">
+                ESTOS PRODUCTOS TE PUEDEN INTERESAR
+              </span>
             </Col>
             <Col className="d-flex align-items-center">
               <hr style={{ flex: 1, borderColor: "var(--secundario)" }} />
@@ -76,34 +98,18 @@ function Home() {
           </Row>
 
           <Row className="g-4 mb-5 justify-content-evenly">
-            <Col xs={12} md={3}>
-              {renderCard(
-                "Producto 1",
-                "Descripción breve del producto 4.",
-                "https://placehold.co/300x200"
-              )}
-            </Col>
-            <Col xs={12} md={3}>
-              {renderCard(
-                "Producto 2",
-                "Descripción breve del producto 5.",
-                "https://placehold.co/300x200"
-              )}
-            </Col>
-            <Col xs={12} md={3}>
-              {renderCard(
-                "Producto 3",
-                "Descripción breve del producto 6.",
-                "https://placehold.co/300x200"
-              )}
-            </Col>
-            <Col xs={12} md={3}>
-              {renderCard(
-                "Producto 4",
-                "Descripción breve del producto 7.",
-                "https://placehold.co/300x200"
-              )}
-            </Col>
+            {randomProducts.map((product) => (
+              <Col key={product.id} xs={12} md={3}>              
+              
+                  {renderCard(
+                    product.nombre,
+                    product.descripcion,
+                    product.image_url,
+                    `/producto/${product.id}`
+                  )}
+                
+              </Col>
+            ))}
           </Row>
 
           <Row>
@@ -128,3 +134,4 @@ function Home() {
 }
 
 export default Home;
+
