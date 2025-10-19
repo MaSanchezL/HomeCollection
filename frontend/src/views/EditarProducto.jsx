@@ -82,7 +82,7 @@ const EditarProducto = () => {
     };
 
     try {
-      const res = await fetch("${API_URL}/products/update", {
+      const res = await fetch(`${API_URL}/products/update`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

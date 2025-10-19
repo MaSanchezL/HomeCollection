@@ -70,7 +70,7 @@ const RouterManager = () => {
         element={user ? <MisPedidos /> : <Navigate to="/login" replace />}
       />
       <Route
-        path="/orders:id"
+        path="/orders/:id"
         element={
           user ? <DetalleMisPedidos /> : <Navigate to="/login" replace />
         }

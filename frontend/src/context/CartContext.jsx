@@ -116,9 +116,12 @@ const CartProvider = ({ children }) => {
         throw new Error(data.message || "Error al crear la orden");
       }
 
-      setOrderId(data.id || data.orderId);
-
-      clearCart();
+      return { success: true, order: data };
+    } catch (error) {
+      console.error("Error al finalizar la compra:", error);
+      return { success: false, message: error.message || "Error de conexión" };
+    }
+  };
 
       return { success: true, order: data };
     } catch (error) {

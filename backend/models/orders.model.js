@@ -16,21 +16,23 @@ export const getOrdersByUserId = async (userId) => {
   }
 };
 
-export const getItemsByOrderId = async (userId) => {
+export const getItemsByOrderId = async (orderId) => {
   try {
     const { rows } = await pool.query(
-      `SELECT o.id, o.created_at, o.total_amount
-       FROM orders o
-       WHERE o.user_id = $1
-       ORDER BY o.created_at DESC`,
-      [userId]
+      `SELECT o.order_id, o.id, o.product_id, o.quantity, o.price, p.image_url, p.nombre AS product_name
+       FROM order_items o
+       JOIN products p ON o.product_id = p.id
+       WHERE o.order_id = $1
+       ORDER BY o.id ASC`,
+      [orderId]
     );
     return rows;
   } catch (error) {
-    console.error("Error en getOrdersByUserId:", error);
-    throw new Error("No se pudieron obtener los pedidos");
+    console.error("Error en getItemsByOrderId:", error);
+    throw new Error("No se pudo obtener el detalle");
   }
 };
+
 export const createOrderForUser = async (userId, items, total) => {
   try {
     console.log("Creando orden para userId:", userId);
