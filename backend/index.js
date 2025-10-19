@@ -1,5 +1,5 @@
 import express from "express";
-import app from "./index.js";
+
 import cors from "cors";
 import path from "path";
 import "dotenv/config";
