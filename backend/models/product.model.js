@@ -1,7 +1,7 @@
 import pool from "../db.js";
 import format from "pg-format";
 
-// GET. Obtener productos por el id. (detalle del producto)
+// GET. Obtener productos por el id
 
 export const byId = async (id) => {
   const query = "SELECT * FROM products WHERE id=$1";
@@ -10,8 +10,7 @@ export const byId = async (id) => {
   return productFormat(response.rows[0]);
 };
 
-// POST. Crear producto (formulario)
-
+// POST. Crear producto.
 export const createProductModel = async (
   nombre,
   descripcion,

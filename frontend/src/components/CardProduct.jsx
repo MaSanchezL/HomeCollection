@@ -79,12 +79,6 @@ const CardProduct = () => {
     }
   };
 
-  /*  useEffect(() => {
-    if (id) {
-      getProducyById();
-    }
-  }, [id]); */
-
   useEffect(() => {
     getProducyById();
   }, [id, user]);
@@ -104,10 +98,6 @@ const CardProduct = () => {
       removeFavorite();
     }
   };
-
-  /*   const handleAddCartClick = () => {
-    agregarProducto(product, cantidad);
-  }; */
 
   return (
     <Card className="carta">
@@ -166,16 +156,15 @@ const CardProduct = () => {
                 </Button>
 
                 {
-                  // mostrar solo si existe un usuario en el contexto
                   user && (
                     <Button
                       onClick={handleLikeClick}
-                      style={{ border: "none", backgroundColor: "transparent" }} // opcional quitar borde
+                      style={{ border: "none", backgroundColor: "transparent" }}
                     >
                       <FontAwesomeIcon
                         icon={faHeart}
                         size="2x"
-                        color={like ? "red" : "gray"} // cambia color según estado
+                        color={like ? "red" : "gray"}
                       />
                     </Button>
                   )
