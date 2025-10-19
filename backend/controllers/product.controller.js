@@ -9,6 +9,7 @@ import {
   createProductModel,
   deleteProduct,
   getAllProducts,
+  productosRandom,
   updateProduct,
 } from "../models/product.model.js";
 
@@ -186,3 +187,25 @@ export const product_delete = async (req, res) => {
     console.error("Error=>", error);
   }
 };
+
+
+
+// productos random
+
+export const product_random = async (req, res) => {
+  try {   
+
+    const ramdon = await productosRandom();    
+    res.status(200).json(ramdon);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error al procesar solicitud" });
+    console.error("Error=>", error);
+  }
+};
+
+
+
+
+
+

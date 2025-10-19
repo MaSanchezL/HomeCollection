@@ -8,7 +8,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import { UserContext } from "../context/UserContext";
 
 const CheckoutSuccess = () => {
-  const { cart, totalPrice, totalProducts, clearCart } =
+  const { cart, totalPrice, totalProducts, clearCart, orderId } =
     useContext(CartContext);
   const { user, logout } = useContext(UserContext);
 
@@ -32,8 +32,8 @@ const CheckoutSuccess = () => {
             Muchas Gracias!
           </h3>
           <p className="lead">
-            Tu número de boleta es:
-            <strong>#{Math.floor(Math.random() * 900000) + 100000}</strong>
+            Tu número de orden es: 
+            <span className="fw-bold">{orderId}</span>
           </p>
 
           <hr />

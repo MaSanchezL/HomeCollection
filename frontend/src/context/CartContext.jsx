@@ -7,12 +7,11 @@ export const CartContext = createContext();
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const { user } = useContext(UserContext);
+  const [orderId, setOrderId] = useState(null);
 
   const API_URL = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    console.log("ver lo que cart en el contexto", cart);
-  }, [cart]);
+  useEffect(() => {}, [cart]);
 
   const agregarProducto = (producto) => {
     const productoId = cart.find((e) => e.id === producto.id);
@@ -124,6 +123,12 @@ const CartProvider = ({ children }) => {
     }
   };
 
+      return { success: true, order: data };
+    } catch (error) {
+      console.error("Error al finalizar la compra:", error);
+      return { success: false, message: error.message || "Error de conexión" };
+    }
+  };
   return (
     <CartContext.Provider
       value={{
@@ -137,6 +142,7 @@ const CartProvider = ({ children }) => {
         totalProducts,
         clearCart,
         checkout,
+        orderId,
       }}
     >
       {children}
