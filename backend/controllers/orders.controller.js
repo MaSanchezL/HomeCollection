@@ -39,7 +39,6 @@ export const getMyOrderDetail = async (req, res) => {
   }
 };
 
-// 🔹 Crear orden del usuario logueado
 export const createOrder = async (req, res) => {
   try {
     const emailUser = req.user;
