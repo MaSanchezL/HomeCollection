@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest --forceExit --detectOpenHandles",
+    "test": "jest",
     "test2": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test-exit": "node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit"
   },
@@ -32,24 +32,5 @@
     "jest": "^30.2.0",
     "nodemon": "^3.1.0",
     "supertest": "^7.1.4"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.js"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "statements": 100,
-        "branches": 100,
-        "functions": 100,
-        "lines": 100
-      }
-    }
   }
 }

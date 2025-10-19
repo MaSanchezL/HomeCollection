@@ -7,3 +7,4 @@ build/
 .DS_Store
 .env.local
 .env.production
+.env.test

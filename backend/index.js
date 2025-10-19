@@ -8,11 +8,10 @@ import productRoute from "./routes/product.route.js";
 import ordersRouter from "./routes/orders.route.js";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const allowedOrigins = [process.env.FRONTEND_URL];
+const allowedOrigins = process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [];
 
 app.use(
   cors({
@@ -59,10 +58,6 @@ app.use((err, req, res, next) => {
     success: false,
     message: err.message || "Error interno del servidor",
   });
-});
-
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
 export default app;
