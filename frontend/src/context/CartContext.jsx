@@ -7,12 +7,11 @@ export const CartContext = createContext();
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const { user } = useContext(UserContext);
+  const [orderId, setOrderId] = useState(null);
 
   const API_URL = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    console.log("ver lo que cart en el contexto", cart);
-  }, [cart]);
+  useEffect(() => {}, [cart]);
 
   const agregarProducto = (producto) => {
     const productoId = cart.find((e) => e.id === producto.id);
@@ -84,48 +83,49 @@ const CartProvider = ({ children }) => {
     setCart([]);
   };
 
-const checkout = async () => {
-  if (!user || !user.token) {
-    return {
-      success: false,
-      message: "Usuario debe estar registrado para finalizar la compra",
-    };
-  }
-
-  const orderData = {
-    total_amount: totalPrice,
-    items: cart.map((item) => ({
-      product_id: item.id,
-      quantity: item.count,
-      price: item.precio,
-    })),
-  };
-
-  try {
-    const res = await fetch(`${API_URL}/orders`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-      body: JSON.stringify(orderData),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || "Error al crear la orden");
+  const checkout = async () => {
+    if (!user || !user.token) {
+      return {
+        success: false,
+        message: "Usuario debe estar registrado para finalizar la compra",
+      };
     }
 
-    clearCart();
+    const orderData = {
+      total_amount: totalPrice,
+      items: cart.map((item) => ({
+        product_id: item.id,
+        quantity: item.count,
+        price: item.precio,
+      })),
+    };
 
-    return { success: true, order: data };
-  } catch (error) {
-    console.error("Error al finalizar la compra:", error);
-    return { success: false, message: error.message || "Error de conexión" };
-  }
-};
+    try {
+      const res = await fetch(`${API_URL}/orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(orderData),
+      });
 
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Error al crear la orden");
+      }
+
+      setOrderId(data.id || data.orderId);
+
+      clearCart();
+
+      return { success: true, order: data };
+    } catch (error) {
+      console.error("Error al finalizar la compra:", error);
+      return { success: false, message: error.message || "Error de conexión" };
+    }
+  };
   return (
     <CartContext.Provider
       value={{
@@ -139,6 +139,7 @@ const checkout = async () => {
         totalProducts,
         clearCart,
         checkout,
+        orderId,
       }}
     >
       {children}
