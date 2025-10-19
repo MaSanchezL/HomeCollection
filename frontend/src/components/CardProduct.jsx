@@ -171,7 +171,6 @@ const CardProduct = () => {
                 }
 
                 <Link to={`/galeria`}> Regresar a la Galería </Link>
-                <Link to={`/cart`}> Carro</Link>
               </div>
             </Card.Body>
           </Col>
