@@ -7,7 +7,6 @@ import Button from "react-bootstrap/Button";
 import "../assets/css/Home.css";
 import { useEffect, useState } from "react";
 
-
 const renderCard = (title, text, imgSrc, url) => (
   <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
     <Card className="text-center shadow home-card" style={{ height: "100%" }}>
@@ -21,25 +20,22 @@ const renderCard = (title, text, imgSrc, url) => (
 );
 
 function Home() {
-
   const [randomProducts, setRandomProducts] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
 
-    useEffect(() => {
-      const HomeRandomProducts= async () =>{
-        try {
-          const res = await fetch("${API_URL}/products/random");
-          const data = await res.json();
-          setRandomProducts(data);
-        } catch (error) {
-          alert(error.message);
-        }
-      }; 
+  useEffect(() => {
+    const HomeRandomProducts = async () => {
+      try {
+        const res = await fetch(`${API_URL}/products/random`);
+        const data = await res.json();
+        setRandomProducts(data);
+      } catch (error) {
+        alert(error.message);
+      }
+    };
 
-
-        HomeRandomProducts();
-
-    }, [] );
-
+    HomeRandomProducts();
+  }, []);
 
   return (
     <>
@@ -99,15 +95,13 @@ function Home() {
 
           <Row className="g-4 mb-5 justify-content-evenly">
             {randomProducts.map((product) => (
-              <Col key={product.id} xs={12} md={3}>              
-              
-                  {renderCard(
-                    product.nombre,
-                    product.descripcion,
-                    product.image_url,
-                    `/producto/${product.id}`
-                  )}
-                
+              <Col key={product.id} xs={12} md={3}>
+                {renderCard(
+                  product.nombre,
+                  product.descripcion,
+                  product.image_url,
+                  `/producto/${product.id}`
+                )}
               </Col>
             ))}
           </Row>
@@ -134,4 +128,3 @@ function Home() {
 }
 
 export default Home;
-

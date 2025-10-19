@@ -1,21 +1,20 @@
-import React, { useContext, useEffect } from "react";
-import { Navigate, Link, useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
-import { UserContext } from "../context/UserContext";
 
 const CheckoutSuccess = () => {
-  const { cart, totalPrice, totalProducts, clearCart, orderId } =
-    useContext(CartContext);
-  const { user, logout } = useContext(UserContext);
+  const { totalPrice, totalProducts, clearCart, orderId } = useContext(CartContext);
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    clearCart();
+  const handleGoHome = () => {
+    clearCart();    
+    navigate("/");   
   };
+
   return (
     <Container className="my-5 d-flex justify-content-center">
       <Card style={{ maxWidth: "600px", width: "100%" }} className="shadow-lg">
@@ -52,22 +51,13 @@ const CheckoutSuccess = () => {
             </ListGroup.Item>
           </ListGroup>
 
-          <div className="mt-5 d-grid gap-3">
+          <div className="mt-5 d-grid">
             <Button
-              as={Link}
-              to="/galeria"
               className="pedidos-button"
               size="lg"
+              onClick={handleGoHome}
             >
-              Continuar Comprando
-            </Button>
-            <Button
-              as={Link}
-              to="/"
-              className="logout-button"
-              onClick={handleLogout}
-            >
-              Cerrar Sesión
+              Volver al Inicio
             </Button>
           </div>
         </Card.Body>
