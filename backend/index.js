@@ -1,4 +1,5 @@
 import express from "express";
+
 import cors from "cors";
 import path from "path";
 import "dotenv/config";
@@ -10,6 +11,7 @@ import ordersRouter from "./routes/orders.route.js";
 const app = express();
 
 app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
 const allowedOrigins = process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [];
 
@@ -58,6 +60,10 @@ app.use((err, req, res, next) => {
     success: false,
     message: err.message || "Error interno del servidor",
   });
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
 export default app;
