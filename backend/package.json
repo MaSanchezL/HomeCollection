@@ -3,10 +3,15 @@
   "version": "1.0.0",
   "description": "API para consumir un servicio de Auth con JWT.",
   "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest --forceExit --detectOpenHandles"
+    "test": "jest --forceExit --detectOpenHandles",
+    "test2": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test-exit": "node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +22,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
-    "jest": "^30.2.0",
     "jsonwebtoken": "^9.0.2",
     "nanoid": "^5.0.6",
     "pg": "^8.16.3",
@@ -25,6 +29,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.3",
+    "jest": "^30.2.0",
     "nodemon": "^3.1.0",
     "supertest": "^7.1.4"
   },
@@ -46,8 +51,5 @@
         "lines": 100
       }
     }
-  },
-  "directories": {
-    "test": "tests"
   }
 }
