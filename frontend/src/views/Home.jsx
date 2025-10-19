@@ -27,7 +27,7 @@ function Home() {
     useEffect(() => {
       const HomeRandomProducts= async () =>{
         try {
-          const res = await fetch("${API_URL}/products//random");
+          const res = await fetch("${API_URL}/products/random");
           const data = await res.json();
           setRandomProducts(data);
         } catch (error) {
