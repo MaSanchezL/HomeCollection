@@ -48,7 +48,7 @@ const GaleriaProductos = ({categoriaInicial}) => {
      
     return <div>No existen elementos en la base de datos</div>;
   }
-  console.log("total de productos", totalProductos)
+  // console.log("total de productos", totalProductos)
 
 
   return (

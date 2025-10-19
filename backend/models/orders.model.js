@@ -35,9 +35,9 @@ export const getItemsByOrderId = async (orderId) => {
 
 export const createOrderForUser = async (userId, items, total) => {
   try {
-    console.log("Creando orden para userId:", userId);
-    console.log("Total:", total);
-    console.log("Items:", items);
+    // console.log("Creando orden para userId:", userId);
+    // console.log("Total:", total);
+    // console.log("Items:", items);
 
     const orderResult = await pool.query(
       `INSERT INTO orders (user_id, total_amount)
