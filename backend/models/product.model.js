@@ -117,3 +117,12 @@ export const updateProduct = async (
   const response = await pool.query(query, values);
   return response.rows[0];
 };
+
+
+// productos random
+
+export const productosRandom = async () => {
+  const query = "SELECT * FROM products ORDER BY RANDOM() LIMIT 4";
+  const response = await pool.query(query);
+  return response.rows;
+};
