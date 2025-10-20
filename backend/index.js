@@ -1,9 +1,7 @@
 import express from "express";
-
 import cors from "cors";
 import path from "path";
 import "dotenv/config";
-
 import authRouter from "./routes/auth.route.js";
 import productRoute from "./routes/product.route.js";
 import ordersRouter from "./routes/orders.route.js";
@@ -13,7 +11,9 @@ const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
-const allowedOrigins = process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [];
+const allowedOrigins = process.env.FRONTEND_URL
+  ? [process.env.FRONTEND_URL]
+  : [];
 
 app.use(
   cors({
