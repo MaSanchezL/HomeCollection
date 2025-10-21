@@ -99,7 +99,7 @@ const Cart = () => {
   const navigate = useNavigate();
 
   const showMessage = (message) => {
-    console.error(`ERROR: ${message}`);
+    alert(message);
   };
 
   const handleCheckout = async () => {
