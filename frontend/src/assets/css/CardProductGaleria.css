@@ -83,6 +83,9 @@
 
 }
 
+.title-cart{
+  color: var(--principal);
+}
 
 @media (max-width: 425px) {
   
