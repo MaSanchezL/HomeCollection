@@ -87,11 +87,29 @@ const Cart = () => {
                           variant="outline-secondary"
                           size="sm"
                           onClick={() => quitarProducto(item)}
-                          className="me-2"
+                          className="me-2 btn-cant"
                         >
                           -
                         </Button>
                         {item.count}
+                        <Button
+                          variant="outline-secondary"
+                          size="sm"
+                          onClick={() => agregarProducto(item)}
+                          className="ms-2 btn-cant"
+                        >
+                          +
+                        </Button>
+                      </td>
+                       <td className="button-mobile">
+                        <Button
+                          variant="outline-secondary"
+                          size="sm"
+                          onClick={() => quitarProducto(item)}
+                          className="me-2"
+                        >
+                          -
+                        </Button>
                         <Button
                           variant="outline-secondary"
                           size="sm"
