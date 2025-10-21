@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { faFilePen, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { NumericFormat } from "react-number-format";
 
 const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
   const { user } = useContext(UserContext);
@@ -20,10 +21,16 @@ const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
   return (
     <Card className="carta-galeria">
       <Card.Img variant="top" src={imagen} />
-      <Card.Body className="texto">
+      <Card.Body className="card-body-galeria">
         <Card.Title>{nombre}</Card.Title>
-        <Card.Text className="fw-bold">
-          Precio: {parseFloat(precio).toFixed(0)}{" "}
+        <Card.Text className="fw-bold fs-3">
+          <NumericFormat
+            value={precio}
+            displayType={"text"}
+            thousandSeparator="."
+            decimalSeparator=","
+            prefix={"$"}
+          />
         </Card.Text>
       </Card.Body>
       <Card.Body className="boton">
@@ -39,10 +46,11 @@ const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
       </Card.Body>
       <Card.Body className="d-flex justify-content-end">
         {user && user.rol_administrador && (
-          <Button className="icono"
+          <Button
+            className="icono"
             onClick={handleEditClick}
             style={{ border: "none", backgroundColor: "transparent" }}
-          >            
+          >
             <FontAwesomeIcon icon={faPenToSquare} size="2x" color="blue" />
           </Button>
         )}
@@ -50,6 +58,5 @@ const CardProductGaleria = ({ id, nombre, imagen, precio }) => {
     </Card>
   );
 };
-
 
 export default CardProductGaleria;

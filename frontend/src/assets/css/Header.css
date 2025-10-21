@@ -37,3 +37,10 @@
   /* transform: scale(1.2); */
   color: var(--secundario);
 }
+
+@media (max-width: 768px) {
+  
+  .header-title{
+  display: none;
+  }
+}

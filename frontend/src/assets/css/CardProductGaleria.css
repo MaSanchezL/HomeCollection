@@ -5,6 +5,10 @@
   --fondo: #e7f2ef;
 }
 
+.btn-cant{
+  display: block;
+}
+
 .carta-galeria {
   display: flex;
   flex-direction: column;
@@ -30,6 +34,12 @@
   
 }
 
+.card-body-galeria{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 150px;
+}
 
 .carta-galeria .card-body.texto {
   display: flex; 
@@ -37,6 +47,9 @@
  
 }
 
+.button-mobile{
+  display: none;
+}
 
 .card-text.fw-bold{  
   text-align: end;
@@ -68,4 +81,27 @@
 .icono svg{
   color: var(--principal)
 
+}
+
+
+@media (max-width: 425px) {
+  
+.btn-cant{
+  display: none;
+}
+
+.button-mobile{
+  display: block;
+}
+
+}
+
+@media (max-width: 991px) {
+.button-mobile{
+  display: block;
+}
+
+.btn-cant{
+  display: none;
+}
 }

@@ -133,7 +133,7 @@ function Home() {
                 >
                   <Card className="text-center shadow home-card">
                     <Card.Img variant="top" src={product.image_url} />
-                    <Card.Body>
+                    <Card.Body className="card-body-home">
                       <Card.Title style={{ color: "var(--principal)" }}>
                         {product.nombre}
                       </Card.Title>
