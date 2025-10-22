@@ -15,6 +15,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [checkingSession, setCheckingSession] = useState(true);
+  const handleRegister = () => navigate("/register");
 
   const isTokenValid = (token) => {
     if (!token) return false;
@@ -114,9 +115,13 @@ function Login() {
 
             <p className="text-center mt-3">
               ¿No tienes cuenta?{" "}
-              <a href="/register" className="login-link">
+              <span
+                onClick={handleRegister}
+                className="login-link"
+                style={{ cursor: "pointer" }}
+              >
                 Regístrate aquí
-              </a>
+              </span>
             </p>
           </div>
         </Col>
